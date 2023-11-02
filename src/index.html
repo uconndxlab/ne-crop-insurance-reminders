@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>New England Crop Insurance App</title>
+</head>
+<body>
+
+  <div id="authForm">
+    <h2>New England Crop Insurance</h2>
+    <label>Email</label> <br>
+    <input type="email" placeholder="email" id="userEmail"> <br>
+    <label>Password</label> <br>
+    <input type="password" placeholder="password" id="userPassword"> <br>
+    <label>State</label> <br>
+
+    <select name="state" id="userState">
+      <option value="CT">CT</option>
+      <option value="ME">ME</option>
+      <option value="MA">MA</option>
+      <option value="NH">NH</option>
+      <option value="RI">RI</option>
+      <option value="VT">VT</option>
+    </select>
+
+    <br><br>
+    <button id="signUpButton">Sign Up</button>
+    <button id="signInButton">Sign In</button>
+  </div>
+
+  <div id="loggedIn">
+    <h1>Hello, you have successfully Logged In!</h1>
+    <button id="signOutButton">Sign Out</button>
+  </div>
+
+  <script type="module">
+    //Update the below URL with the appropriate version if necessary.
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+        signOut
+    //Update the below URL with the appropriate version if necessary.
+    } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from 'firebase/firestore';
+     
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbiuAsUGmV2DCcxWeEC6JSCy-RuQB8TcQ",
+      authDomain: "ms-4afc3.firebaseapp.com",
+      databaseURL: "https://ms-4afc3-default-rtdb.firebaseio.com",
+      projectId: "ms-4afc3",
+      storageBucket: "ms-4afc3.appspot.com",
+      messagingSenderId: "415927539778",
+      appId: "1:415927539778:web:39381dd654222b817075db"
+    };
+  
+    // Initialize Firebase  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore();
+
+    const userEmail = document.querySelector("#userEmail");
+    const userPassword = document.querySelector("#userPassword");
+    const userState = document.querySelector("#userState");
+    const authForm = document.querySelector("#authForm");
+    const loggedIn = document.querySelector("#loggedIn");
+    const signUpButton = document.querySelector("#signUpButton");
+    const signInButton = document.querySelector("#signInButton");
+    const signOutButton = document.querySelector("#signOutButton");
+    const colRef = collection(db, 'userState')
+
+    getDocs(colRef)
+      .then((snapshot) => {
+        console.log(snapshot.docs);
+      })
+
+    loggedIn.style.display = 'none';
+
+    const userSignUp = async() => {
+        const signUpEmail = userEmail.value;
+        const signUpPassword = userPassword.value;
+        createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user);
+
+            alert("Your account has been created!");
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode + errorMessage)
+        })
+    }
+
+    const userSignIn = async() => {
+        const signInEmail = userEmail.value;
+        const signInPassword = userPassword.value;
+        signInWithEmailAndPassword(auth, signInEmail, signInPassword)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            alert("You have signed in successfully!");
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode + errorMessage)
+        })
+    }
+
+    const checkAuthState = async() => {
+        onAuthStateChanged(auth, user => {
+            if(user) {
+                authForm.style.display = 'none';
+                loggedIn.style.display = 'block';
+            }
+            else {
+                authForm.style.display = 'block';
+                loggedIn.style.display = 'none';
+            }
+        })
+    }
+
+    const userSignOut = async() => {
+        await signOut(auth);
+    }
+
+    checkAuthState();
+
+    signUpButton.addEventListener('click', userSignUp);
+    signInButton.addEventListener('click', userSignIn);
+    signOutButton.addEventListener('click', userSignOut);
+  </script>
+ 
+</body>
+</html>
