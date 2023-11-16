@@ -1,3 +1,85 @@
-<h1>
-  This is where you can build your app! Weoo!
-</h1>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>New England Crop Insurance App</title>
+</head>
+
+<body>
+
+  <section id="whenSignedOut">
+    <div id="authForm">
+      <h2>New England Crop Insurance</h2>
+      <label>Email</label> <br>
+      <input type="email" placeholder="email" id="userEmail"> <br>
+      <label>Password</label> <br>
+      <input type="password" placeholder="password" id="userPassword"> <br>
+      
+      <label>State</label> <br>
+      <select name="state" id="userState">
+        <option value="State">State</option>
+        <option value="CT">CT</option>
+        <option value="MA">MA</option>
+        <option value="ME">ME</option>
+        <option value="NH">NH</option>
+        <option value="NY">NY</option>
+        <option value="PA">PA</option>
+        <option value="RI">RI</option>
+        <option value="VT">VT</option>
+      </select> <br>
+
+      <label>Notification Type</label> <br>
+      <select name="notification-type" id="notif-type">
+        <option value="Notification Type">Notification Type</option>
+        <option value="BiWeekly">Email</option>
+        <option value="Monthly">SMS</option>
+      </select> <br>
+
+      <label>Crops</label> <br>
+        <input type="checkbox" name="user_Crop" value="Wheat">Wheat<br>  
+        <input type="checkbox" name="user_Crop" value="Asparagus">Asparagus<br>  
+        <input type="checkbox" name="user_Crop" value="Beans">Beans<br>  
+
+      <button id="signUpButton">Sign Up</button>
+      <button id="signInButton">Sign In</button>
+    </div>
+  </section>
+
+  <section id="whenSignedIn" hidden="true">
+
+    <h1>Hello, you have successfully Logged In!</h1>
+
+    <div id="userDetails"></div>
+
+    <button id="signOutButton">Sign Out</button>
+
+  </section>
+
+  <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
+
+    // Add Firebase products that you want to use
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js'
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js'
+
+    // TODO: Replace the following with your app's Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbiuAsUGmV2DCcxWeEC6JSCy-RuQB8TcQ",
+      authDomain: "ms-4afc3.firebaseapp.com",
+      databaseURL: "https://ms-4afc3-default-rtdb.firebaseio.com",
+      projectId: "ms-4afc3",
+      storageBucket: "ms-4afc3.appspot.com",
+      messagingSenderId: "415927539778",
+      appId: "1:415927539778:web:39381dd654222b817075db"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
+
+  <script src="app.js" type="module"></script>
+  
+</body>
+</html>
