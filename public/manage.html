@@ -47,7 +47,7 @@
     <div id="manage">
 
         <h4>Manage Deadlines</h4>
-        <table id="deadlines">
+        <table>
             <tr>
                 <td>
                     State
@@ -71,6 +71,9 @@
                     Delete
                 </td>
             </tr>
+
+            <tbody id="deadlines">
+            </tbody>
 
         </table>
 
@@ -107,6 +110,39 @@
 
             <button type="submit">Create</button>
         </form>
+
+        <h2> Manage Notifications </h2>
+        <table>
+            <tr>
+                <td>
+                    State
+                </td>
+                <td>
+                    Crop
+                </td>
+                <td>
+                    Acreage Reporting Date Reminders
+                </td>
+                <td>
+                    Sales Closing Date Reminders
+                </td>
+                <td>
+                    Production Reporting Date Reminders
+                </td> 
+                <td>
+                    Edit
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+            <tbody id="reminders">
+            </tbody>
+    
+        </table>
+
+
+
     </div>
 
 
@@ -155,9 +191,14 @@
 
                     state.innerHTML = doc.data().state;
                     crop.innerHTML = doc.data().crop;
-                    acreage.innerHTML = new Date(doc.data().acreage_reporting.toDate()).toLocaleDateString();
-                    sales.innerHTML = new Date(doc.data().sales_closing.toDate()).toLocaleDateString();
-                    production.innerHTML = new Date(doc.data().production_reporting.toDate()).toLocaleDateString();
+                    acreage.innerHTML = new Date(doc.data().acreage_reporting.seconds * 1000).toLocaleDateString();
+                    // sales_closing is an array of timestamps, so we need to convert them to dates and put them in a string and then put that string in the table
+                    var sales_closing = "";
+                    for (var i = 0; i < doc.data().sales_closing.length; i++) {
+                        sales_closing += new Date(doc.data().sales_closing[i].seconds * 1000).toLocaleDateString() + "<br>";
+                    }
+                    sales.innerHTML = sales_closing;
+                    production.innerHTML = new Date(doc.data().production_reporting.seconds * 1000).toLocaleDateString();
                     edit.innerHTML = "<button>Edit</button>";
                     del.innerHTML = "<button>Delete</button>";
 
@@ -170,13 +211,52 @@
                     row.appendChild(del);
 
                     document.querySelector("#deadlines").appendChild(row);
+
                 });
             });
-           
+        }
 
+        function populateNotifictions(){
+            // get each document in the schedules collection
+            const notificationsCol = collection(db, 'notifications');
+            const notificationsQ = query(notificationsCol);
 
+            onSnapshot(notificationsQ, (querySnapshot) => {
+                document.querySelector("#reminders").innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    var row = document.createElement("tr");
+                    var state = document.createElement("td");
+                    var crop = document.createElement("td");
+                    var acreage = document.createElement("td");
+                    var sales = document.createElement("td");
+                    var production = document.createElement("td");
+                    var edit = document.createElement("td");
+                    var del = document.createElement("td");
 
+                    state.innerHTML = doc.data().state;
+                    crop.innerHTML = doc.data().crop;
+                    // sales_closing is an array of timestamps, so we need to convert them to dates and put them in a string and then put that string in the table
+                    var sales_closing = "";
+                    for (var i = 0; i < doc.data().sales_closing.length; i++) {
+                        sales_closing += new Date(doc.data().sales_closing[i].seconds * 1000).toLocaleDateString() + "<br>";
+                    }
+                    sales.innerHTML = sales_closing;
+                    edit.innerHTML = "<button>Edit</button>";
+                    del.innerHTML = "<button>Delete</button>";
 
+                    row.appendChild(state);
+                    row.appendChild(crop);
+                    row.appendChild(acreage);
+                    row.appendChild(sales);
+                    row.appendChild(production);
+                    row.appendChild(edit);
+                    row.appendChild(del);
+
+                    document.querySelector("#reminders").appendChild(row);
+                });
+            });
         }
 
         function createDeadline() {
@@ -206,7 +286,8 @@
 
         }
 
-        populateDeadlines();
+        await populateDeadlines();
+       await populateNotifictions();
 
         document.querySelector("#create-deadline").addEventListener("submit", function (e) {
             e.preventDefault();
