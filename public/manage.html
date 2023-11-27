@@ -13,7 +13,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -26,15 +27,52 @@
         tr:hover {
             background-color: #f5f5f5;
         }
+
+        button, input[type=submit], input[type=button] {
+            background-color: #e4e4e4;
+            border: none;
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Profile</h1>
-    <h2 class="auth_username"></h2>
-    <div id="profile">
+    <h1>Manage</h1>
+    <div id="manage">
 
-        <h3>Manage</h3>
+        <h4>Manage Deadlines</h4>
+        <table id="deadlines">
+            <tr>
+                <td>
+                    State
+                </td>
+                <td>
+                    Crop
+                </td>
+                <td>
+                    Acreage Reporting Date
+                </td>
+                <td>
+                    Sales Closing Date
+                </td>
+                <td>
+                    Production Reporting Date
+                </td>
+                <td>
+                    Edit
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+
+        </table>
 
         <!-- create a deadline -->
         <h4>Create a Deadline</h4>
@@ -46,8 +84,6 @@
                 <option value="MA">MA</option>
                 <option value="ME">ME</option>
                 <option value="NH">NH</option>
-                <option value="NY">NY</option>
-                <option value="PA">PA</option>
                 <option value="RI">RI</option>
                 <option value="VT">VT</option>
             </select> <br>
@@ -71,35 +107,6 @@
 
             <button type="submit">Create</button>
         </form>
-
-        <h4>Manage Deadlines</h4>
-        <table id="deadlines">
-            <tr><td>
-                State
-            </td>
-            <td>
-                Crop
-            </td>
-            <td>
-                Acreage Reporting Date
-            </td>
-            <td>
-                Sales Closing Date
-            </td>
-            <td>
-                Production Reporting Date
-            </td>
-            <td>
-                Edit
-            </td>
-            <td>
-                Delete
-            </td>
-        </tr>
-
-        </table>
-
-
     </div>
 
 
@@ -107,7 +114,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js'
-        import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js'
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, onSnapshot} from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js'
 
         // TODO: Replace the following with your app's Firebase project configuration
         const firebaseConfig = {
@@ -132,7 +139,8 @@
             const schedulesCol = collection(db, 'schedules');
             const schedulesQ = query(schedulesCol);
 
-            getDocs(schedulesQ).then((querySnapshot) => {
+            onSnapshot(schedulesQ, (querySnapshot) => {
+                document.querySelector("#deadlines").innerHTML = "";
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
@@ -164,11 +172,46 @@
                     document.querySelector("#deadlines").appendChild(row);
                 });
             });
+           
+
+
+
+
+        }
+
+        function createDeadline() {
+            // get the values from the form
+            var state = document.querySelector("#state").value;
+            var crop = document.querySelector("#crop").value;
+            var acreage = document.querySelector("#acreage").value;
+            var sales = document.querySelector("#sales").value;
+            var production = document.querySelector("#production").value;
+
+            // create a new document in the schedules collection, at the path /schedules/{state}-{crop} (lowercase)
+            const docRef = doc(db, "schedules", state.toLowerCase() + "-" + crop.toLowerCase());
+
+            // set the data in the document
+            setDoc(docRef, {
+                state: state,
+                crop: crop,
+                acreage_reporting: new Date(acreage),
+                sales_closing: new Date(sales),
+                production_reporting: new Date(production)
+            }).then(() => {
+                console.log("Document successfully written!");
+            }).catch((error) => {
+                console.error("Error writing document: ", error);
+            });
 
 
         }
 
         populateDeadlines();
+
+        document.querySelector("#create-deadline").addEventListener("submit", function (e) {
+            e.preventDefault();
+            createDeadline();
+        });
 
     </script>
 
