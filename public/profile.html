@@ -63,10 +63,11 @@
                     document.querySelector('.auth_username').innerHTML = email;
                     // populate profile with the user's subscriptions, which is an array of strings
                     profile.then(function(result) {
-                        // loop through the subscriptions array and create a list item for each one
+                        // loop through the subscriptions array and create a checkbox for each one
                         var profileHTML = "";
                         for (var i = 0; i < result.subscriptions.length; i++) {
-                            profileHTML += "<li>" + result.subscriptions[i] + "</li>";
+                            profileHTML += '<input type="checkbox" checked id="subscription-' + i + '" name="subscription" value="' + result.subscriptions[i] + '">';
+                            profileHTML += '<label for="subscription-' + i + '">' + result.subscriptions[i] + '</label><br>';
                         }
                         document.querySelector('#my-subs').innerHTML = profileHTML;
                     });
