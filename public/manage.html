@@ -36,6 +36,42 @@
 
         <h3>Manage</h3>
 
+        <!-- create a deadline -->
+        <h4>Create a Deadline</h4>
+        <form id="create-deadline">
+            <label for="state">State</label>
+            <select name="state" id="state">
+                <option value="State">State</option>
+                <option value="CT">CT</option>
+                <option value="MA">MA</option>
+                <option value="ME">ME</option>
+                <option value="NH">NH</option>
+                <option value="NY">NY</option>
+                <option value="PA">PA</option>
+                <option value="RI">RI</option>
+                <option value="VT">VT</option>
+            </select> <br>
+
+            <label for="crop">Crop</label>
+            <select name="crop" id="crop">
+                <option value="Crop">Crop</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Asparagus">Asparagus</option>
+                <option value="Beans">Beans</option>
+            </select> <br>
+
+            <label for="acreage">Acreage Reporting Date</label>
+            <input type="date" name="acreage" id="acreage"> <br>
+
+            <label for="sales">Sales Closing Date</label>
+            <input type="date" name="sales" id="sales"> <br>
+
+            <label for="production">Production Reporting Date</label>
+            <input type="date" name="production" id="production"> <br>
+
+            <button type="submit">Create</button>
+        </form>
+
         <h4>Manage Deadlines</h4>
         <table id="deadlines">
             <tr><td>
