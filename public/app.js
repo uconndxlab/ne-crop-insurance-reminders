@@ -69,7 +69,11 @@ const userSignIn = async() => {
     signInWithEmailAndPassword(auth, signInEmail, signInPassword)
     .then((userCredential) => {
         const user = userCredential.user;
-        alert("You have signed in successfully!");
+        // redirect to profile.html
+        window.location.href = 'profile.html';
+
+
+
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -83,6 +87,8 @@ const checkAuthState = async() => {
         if(user) {
             authForm.style.display = 'none';
             whenSignedIn.style.display = 'block';
+            // redirect to profile.html
+            window.location.href = 'profile.html';
         }
         else {
             authForm.style.display = 'block';
