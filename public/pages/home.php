@@ -1,23 +1,37 @@
-<div class="page page-home">
+<div class="page page-home container">
     <header class="page-header">
         <h2>My Profile</h2>
     </header>
     <div class="page-content">
         <section class="page-section section-crops">
-            <h2>All Crops</h2>
-            <ul>
+            <h3>All Crops</h3>
+
                 <!-- get all crops from the database -->
                 <?php
                 $crops = get_all_crops();
-                foreach ($crops as $crop) {
-
-                    echo '<li>
-                    <a href="/crops/delete">[ x ]</a> '
-                    . $crop['crop'] . 
-                    '</li>';
-                }
                 ?>
-            </ul>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($crops as $crop) : ?>
+                            <tr>
+                                <td><?php echo $crop['crop']; ?></td>
+                                <td>
+
+                                    <a class="btn btn-danger" href="/crops/delete/<?php echo $crop['id']; ?>">delete</a>
+
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
 
             <form action="/crops" method="post">
                 <label for="crop">Add a Crop</label>
@@ -28,24 +42,33 @@
         </section>
 
         <section class="page-section section-states">
-            <h2>All States</h2>
-            <ul>
-                <!-- get all states from the database -->
-                <?php
-                $states = get_all_states();
-                foreach ($states as $state) {
-                    echo '<li>' 
-                    . '<a href="/states/delete">[ x ]</a> '
-                    . $state['state'] . '</li>';
-                }
-                ?>
-            </ul>
+            <h3>All States</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- get all states from the database -->
+                    <?php
+                    $states = get_all_states();
+                    foreach ($states as $state) {
+                        echo '<tr>';
+                        echo '<td>' . $state['state'] . '</td>';
+                        echo '<td><a href="/states/delete">[ x ]</a></td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </section>
 
         <section class="page-section section-deadlines">
             <!-- per state, per crop, show all deadlines -->
-            <h2>All Deadlines</h2>
-            <table>
+            <h3>All Deadlines</h3>
+            <table class="table">
                 <tr>
                     <th>State</th>
                     <th>Crop</th>
@@ -70,7 +93,7 @@
 
         <section class="page-section section-manage-deadlines">
             <!-- per state, per crop, add a named deadline and associated date -->
-            <h2>Manage Deadlines</h2>
+            <h3>Manage Deadlines</h3>
             <form action="/deadlines" method="post">
                 <label for="state">State</label>
                 <select name="state" id="state">
