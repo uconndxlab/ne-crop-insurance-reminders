@@ -1,0 +1,306 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New England Crop Insurance App</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        button, input[type=submit], input[type=button] {
+            background-color: #e4e4e4;
+            border: none;
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Manage</h1>
+    <div id="manage">
+
+        <h4>Manage Deadlines</h4>
+        <table>
+            <tr>
+                <td>
+                    State
+                </td>
+                <td>
+                    Crop
+                </td>
+                <td>
+                    Acreage Reporting Date
+                </td>
+                <td>
+                    Sales Closing Date
+                </td>
+                <td>
+                    Production Reporting Date
+                </td>
+                <td>
+                    Edit
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+
+            <tbody id="deadlines">
+            </tbody>
+
+        </table>
+
+        <!-- create a deadline -->
+        <h4>Create a Deadline</h4>
+        <form id="create-deadline">
+            <label for="state">State</label>
+            <select name="state" id="state">
+                <option value="State">State</option>
+                <option value="CT">CT</option>
+                <option value="MA">MA</option>
+                <option value="ME">ME</option>
+                <option value="NH">NH</option>
+                <option value="RI">RI</option>
+                <option value="VT">VT</option>
+            </select> <br>
+
+            <label for="crop">Crop</label>
+            <select name="crop" id="crop">
+                <option value="Crop">Crop</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Asparagus">Asparagus</option>
+                <option value="Beans">Beans</option>
+            </select> <br>
+
+            <label for="acreage">Acreage Reporting Date</label>
+            <input type="date" name="acreage" id="acreage"> <br>
+
+            <label for="sales">Sales Closing Date</label>
+            <input type="date" name="sales" id="sales"> <br>
+
+            <label for="production">Production Reporting Date</label>
+            <input type="date" name="production" id="production"> <br>
+
+            <button type="submit">Create</button>
+        </form>
+
+        <h2> Manage Notifications </h2>
+        <table>
+            <tr>
+                <td>
+                    State
+                </td>
+                <td>
+                    Crop
+                </td>
+                <td>
+                    Acreage Reporting Date Reminders
+                </td>
+                <td>
+                    Sales Closing Date Reminders
+                </td>
+                <td>
+                    Production Reporting Date Reminders
+                </td> 
+                <td>
+                    Edit
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+            <tbody id="reminders">
+            </tbody>
+    
+        </table>
+
+
+
+    </div>
+
+
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js'
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js'
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, onSnapshot} from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js'
+
+        // TODO: Replace the following with your app's Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbiuAsUGmV2DCcxWeEC6JSCy-RuQB8TcQ",
+            authDomain: "ms-4afc3.firebaseapp.com",
+            databaseURL: "https://ms-4afc3-default-rtdb.firebaseio.com",
+            projectId: "ms-4afc3",
+            storageBucket: "ms-4afc3.appspot.com",
+            messagingSenderId: "415927539778",
+            appId: "1:415927539778:web:39381dd654222b817075db"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Get a reference to the database service
+        const auth = getAuth();
+        const db = getFirestore();
+
+        function populateDeadlines() {
+            // get each document in the schedules collection
+            const schedulesCol = collection(db, 'schedules');
+            const schedulesQ = query(schedulesCol);
+
+            onSnapshot(schedulesQ, (querySnapshot) => {
+                document.querySelector("#deadlines").innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    var row = document.createElement("tr");
+                    var state = document.createElement("td");
+                    var crop = document.createElement("td");
+                    var acreage = document.createElement("td");
+                    var sales = document.createElement("td");
+                    var production = document.createElement("td");
+                    var edit = document.createElement("td");
+                    var del = document.createElement("td");
+
+                    state.innerHTML = doc.data().state;
+                    crop.innerHTML = doc.data().crop;
+                    acreage.innerHTML = new Date(doc.data().acreage_reporting.seconds * 1000).toLocaleDateString();
+                    // sales_closing is an array of timestamps, so we need to convert them to dates and put them in a string and then put that string in the table
+                    var sales_closing = "";
+                    for (var i = 0; i < doc.data().sales_closing.length; i++) {
+                        sales_closing += new Date(doc.data().sales_closing[i].seconds * 1000).toLocaleDateString() + "<br>";
+                    }
+                    sales.innerHTML = sales_closing;
+                    production.innerHTML = new Date(doc.data().production_reporting.seconds * 1000).toLocaleDateString();
+                    edit.innerHTML = "<button>Edit</button>";
+                    del.innerHTML = "<button>Delete</button>";
+
+                    row.appendChild(state);
+                    row.appendChild(crop);
+                    row.appendChild(acreage);
+                    row.appendChild(sales);
+                    row.appendChild(production);
+                    row.appendChild(edit);
+                    row.appendChild(del);
+
+                    document.querySelector("#deadlines").appendChild(row);
+
+                });
+            });
+        }
+
+        function populateNotifictions(){
+            // get each document in the schedules collection
+            const notificationsCol = collection(db, 'notifications');
+            const notificationsQ = query(notificationsCol);
+
+            onSnapshot(notificationsQ, (querySnapshot) => {
+                document.querySelector("#reminders").innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    var row = document.createElement("tr");
+                    var state = document.createElement("td");
+                    var crop = document.createElement("td");
+                    var acreage = document.createElement("td");
+                    var sales = document.createElement("td");
+                    var production = document.createElement("td");
+                    var edit = document.createElement("td");
+                    var del = document.createElement("td");
+
+                    state.innerHTML = doc.data().state;
+                    crop.innerHTML = doc.data().crop;
+                    // sales_closing is an array of timestamps, so we need to convert them to dates and put them in a string and then put that string in the table
+                    var sales_closing = "";
+                    for (var i = 0; i < doc.data().sales_closing.length; i++) {
+                        sales_closing += new Date(doc.data().sales_closing[i].seconds * 1000).toLocaleDateString() + "<br>";
+                    }
+                    sales.innerHTML = sales_closing;
+                    edit.innerHTML = "<button>Edit</button>";
+                    del.innerHTML = "<button>Delete</button>";
+
+                    row.appendChild(state);
+                    row.appendChild(crop);
+                    row.appendChild(acreage);
+                    row.appendChild(sales);
+                    row.appendChild(production);
+                    row.appendChild(edit);
+                    row.appendChild(del);
+
+                    document.querySelector("#reminders").appendChild(row);
+                });
+            });
+        }
+
+        function createDeadline() {
+            // get the values from the form
+            var state = document.querySelector("#state").value;
+            var crop = document.querySelector("#crop").value;
+            var acreage = document.querySelector("#acreage").value;
+            var sales = document.querySelector("#sales").value;
+            var production = document.querySelector("#production").value;
+
+            // create a new document in the schedules collection, at the path /schedules/{state}-{crop} (lowercase)
+            const docRef = doc(db, "schedules", state.toLowerCase() + "-" + crop.toLowerCase());
+
+            // set the data in the document
+            setDoc(docRef, {
+                state: state,
+                crop: crop,
+                acreage_reporting: new Date(acreage),
+                sales_closing: new Date(sales),
+                production_reporting: new Date(production)
+            }).then(() => {
+                console.log("Document successfully written!");
+            }).catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
+
+        }
+
+        await populateDeadlines();
+       await populateNotifictions();
+
+        document.querySelector("#create-deadline").addEventListener("submit", function (e) {
+            e.preventDefault();
+            createDeadline();
+        });
+
+    </script>
+
+
+
+
+</body>
+
+
+
+</html>
