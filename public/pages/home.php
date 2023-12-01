@@ -1,124 +1,182 @@
-<div class="page page-home container">
+<div class="page page-home container-fluid">
     <header class="page-header">
-        <h2>My Profile</h2>
+        <h2>Management Dashboard</h2>
     </header>
     <div class="page-content">
-        <section class="page-section section-crops">
-            <h3>All Crops</h3>
+        <div class="accordion" id="accordionSections">
 
-                <!-- get all crops from the database -->
-                <?php
-                $crops = get_all_crops();
-                ?>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="cropsHeading">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cropsCollapse" aria-expanded="true" aria-controls="cropsCollapse">
+                        Crops
+                    </button>
+                </h2>
+                <div id="cropsCollapse" class="accordion-collapse collapse show" aria-labelledby="cropsHeading" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                        <?php
+                        $crops = get_all_crops();
+                        ?>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Crop</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($crops as $crop) : ?>
+                        <div class="card">
+                            <form action="/crops" method="post">
+                                <h5 class="card-header">Add Crop</h5>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="crop">Crop</label>
+                                        <input type="text" name="crop" id="crop">
+                                        <button type="submit" class="btn btn-primary">Add Crop</button>
+                                    </div>
+                                    
+                                </div>
+                            </form>
+                        </div>
+
+                        <table class="table">
+
+                            <tbody>
+                                <?php foreach ($crops as $crop) : ?>
+                                    <tr>
+                                        <td><?php echo $crop['crop']; ?></td>
+                                        <td>
+                                            <a class="btn btn-danger" href="/crops/delete/<?php echo $crop['id']; ?>">delete</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <form action="/crops" method="post">
+                            <div class="mb-3">
+                            <label for="crop">Crops</label>
+                            <input type="text" name="crop" id="crop">
+                            <button type="submit">Add Crop</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="statesHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#statesCollapse" aria-expanded="false" aria-controls="statesCollapse">
+                        States
+                    </button>
+                </h2>
+                <div id="statesCollapse" class="accordion-collapse collapse" aria-labelledby="statesHeading" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                        <div class="card">
+                        <form action="/states" method="post">
+                            <h5 class="card-header">Add State</h5>
+                            <div class="card-body">
+                                
+                                    <div class="mb-3">
+                                        <label for="state">State</label>
+                                        <input type="text" name="state" id="state">
+                                        <button type="submit" class="btn btn-primary">Add State</button>
+                                    </div>
+                                
+                           
+                                
+                            </div>
+                            </form>
+                        </div>
+
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>State</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $states = get_all_states();
+                                foreach ($states as $state) {
+                                    echo '<tr>';
+                                    echo '<td>' . $state['state'] . '</td>';
+                                    echo '<td><a href="/states/delete">[ x ]</a></td>';
+                                    echo '</tr>';
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="deadlinesHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#deadlinesCollapse" aria-expanded="false" aria-controls="deadlinesCollapse">
+                        Deadlines
+                    </button>
+                </h2>
+                <div id="deadlinesCollapse" class="accordion-collapse collapse" aria-labelledby="deadlinesHeading" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                        <!-- card with add deadline form -->
+
+
+                        <div class="card">
+                            <h5 class="card-header">Add Deadline</h5>
+                            <div class="card-body">
+                               
+                                <form action="/deadlines" method="post">
+                                    <div class="mb-3">
+                                        <label for="state">State</label>
+                                        <select name="state" id="state">
+                                            <?php foreach ($states as $state) : ?>
+                                                <option value="<?php echo $state['id']; ?>"><?php echo $state['state']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="crop">Crop</label>
+                                        <select name="crop" id="crop">
+                                            <?php foreach ($crops as $crop) : ?>
+                                                <option value="<?php echo $crop['id']; ?>"><?php echo $crop['crop']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deadline_name">Deadline Name</label>
+                                        <input type="text" name="deadline_name" id="deadline_name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deadline">Deadline Date</label>
+                                        <input type="date" name="deadline" id="deadline">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Add Deadline</button>
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+
+                        <table class="table">
                             <tr>
-                                <td><?php echo $crop['crop']; ?></td>
-                                <td>
-
-                                    <a class="btn btn-danger" href="/crops/delete/<?php echo $crop['id']; ?>">delete</a>
-
-                                </td>
+                                <th>State</th>
+                                <th>Crop</th>
+                                <th>Deadline Name</th>
+                                <th>Deadline Date</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <?php
+                            $deadlines = get_all_deadlines();
+                            foreach ($deadlines as $deadline) {
+                                echo '<tr>';
+                                echo '<td>' . $deadline['state'] . '</td>';
+                                echo '<td>' . $deadline['crop'] . '</td>';
+                                echo '<td>' . $deadline['deadline_name'] . '</td>';
+                                echo '<td>' . $deadline['deadline'] . '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
+                        </table>
 
 
-            <form action="/crops" method="post">
-                <label for="crop">Add a Crop</label>
-                <input type="text" name="crop" id="crop">
-                <button type="submit">Add Crop</button>
-            </form>
 
-        </section>
-
-        <section class="page-section section-states">
-            <h3>All States</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>State</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- get all states from the database -->
-                    <?php
-                    $states = get_all_states();
-                    foreach ($states as $state) {
-                        echo '<tr>';
-                        echo '<td>' . $state['state'] . '</td>';
-                        echo '<td><a href="/states/delete">[ x ]</a></td>';
-                        echo '</tr>';
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </section>
-
-        <section class="page-section section-deadlines">
-            <!-- per state, per crop, show all deadlines -->
-            <h3>All Deadlines</h3>
-            <table class="table">
-                <tr>
-                    <th>State</th>
-                    <th>Crop</th>
-                    <th>Deadline Name</th>
-                    <th>Deadline Date</th>
-                </tr>
-                <!-- get all deadlines from the database. this is a table like state,crop,deadline_name,deadline_date -->
-                <?php
-                $deadlines = get_all_deadlines();
-                // render the <table>
-                foreach ($deadlines as $deadline) {
-                    echo '<tr>';
-                    echo '<td>' . $deadline['state'] . '</td>';
-                    echo '<td>' . $deadline['crop'] . '</td>';
-                    echo '<td>' . $deadline['deadline_name'] . '</td>';
-                    echo '<td>' . $deadline['deadline'] . '</td>';
-                    echo '</tr>';
-                }
-                ?>
-            </table>
-        </section>
-
-        <section class="page-section section-manage-deadlines">
-            <!-- per state, per crop, add a named deadline and associated date -->
-            <h3>Manage Deadlines</h3>
-            <form action="/deadlines" method="post">
-                <label for="state">State</label>
-                <select name="state" id="state">
-                    <?php
-                    $states = get_all_states();
-                    foreach ($states as $state) {
-                        echo '<option value="' . $state['id'] . '">' . $state['state'] . '</option>';
-                    }
-                    ?>
-                </select>
-                <label for="crop">Crop</label>
-                <select name="crop" id="crop">
-                    <?php
-                    $crops = get_all_crops();
-                    foreach ($crops as $crop) {
-                        echo '<option value="' . $crop['id'] . '">' . $crop['crop'] . '</option>';
-                    }
-                    ?>
-                </select>
-                <label for="deadline-name">Deadline Name</label>
-                <input type="text" name="deadline-name" id="deadline-name">
-                <label for="deadline-date">Deadline Date</label>
-                <input type="date" name="deadline-date" id="deadline-date">
-                <button type="submit">Add Deadline</button>
-            </form>
-        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

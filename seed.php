@@ -12,15 +12,18 @@ $db->exec('DROP TABLE IF EXISTS crops_states_deadlines');
 $db->exec('DROP TABLE IF EXISTS deadlines_reminders');
 
 
-/** create a users table assuming firebase IDs */
+/** create a users table: id, email, firstname, lastname, state, phone # */
 $db->exec('CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
-    firebase_id TEXT NOT NULL,
-    state_id INTEGER NOT NULL,
     email TEXT NOT NULL,
-    phone TEXT NOT NULL,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    state_id INTEGER,
+    phone TEXT,
+    password TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
+
 
 /** create user_crops table */
 $db->exec('CREATE TABLE IF NOT EXISTS user_crops (
