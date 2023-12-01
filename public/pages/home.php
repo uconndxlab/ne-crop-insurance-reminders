@@ -1,4 +1,4 @@
-<div class="page page-home container-fluid">
+<div class="page page-home container">
     <header class="page-header">
         <h2>Management Dashboard</h2>
     </header>
@@ -26,7 +26,7 @@
                                         <input type="text" name="crop" id="crop">
                                         <button type="submit" class="btn btn-primary">Add Crop</button>
                                     </div>
-                                    
+
                                 </div>
                             </form>
                         </div>
@@ -46,9 +46,9 @@
                         </table>
                         <form action="/crops" method="post">
                             <div class="mb-3">
-                            <label for="crop">Crops</label>
-                            <input type="text" name="crop" id="crop">
-                            <button type="submit">Add Crop</button>
+                                <label for="crop">Crops</label>
+                                <input type="text" name="crop" id="crop">
+                                <button type="submit">Add Crop</button>
                             </div>
                         </form>
                     </div>
@@ -64,19 +64,19 @@
                 <div id="statesCollapse" class="accordion-collapse collapse" aria-labelledby="statesHeading" data-bs-parent="#accordionSections">
                     <div class="accordion-body">
                         <div class="card">
-                        <form action="/states" method="post">
-                            <h5 class="card-header">Add State</h5>
-                            <div class="card-body">
-                                
+                            <form action="/states" method="post">
+                                <h5 class="card-header">Add State</h5>
+                                <div class="card-body">
+
                                     <div class="mb-3">
                                         <label for="state">State</label>
                                         <input type="text" name="state" id="state">
                                         <button type="submit" class="btn btn-primary">Add State</button>
                                     </div>
-                                
-                           
-                                
-                            </div>
+
+
+
+                                </div>
                             </form>
                         </div>
 
@@ -118,7 +118,7 @@
                         <div class="card">
                             <h5 class="card-header">Add Deadline</h5>
                             <div class="card-body">
-                               
+
                                 <form action="/deadlines" method="post">
                                     <div class="mb-3">
                                         <label for="state">State</label>
@@ -146,7 +146,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Add Deadline</button>
-                                    
+
                                 </form>
                             </div>
                         </div>

@@ -15,6 +15,18 @@ h2 {
     font-size: 1.5rem;
 }
 
+h3 {
+    font-size: 1.25rem;
+}
+
+h4 {
+    font-size: 1rem;
+}
+
+label {
+    font-size: 0.9rem;
+}
+
 main {
     flex: 1;
 }

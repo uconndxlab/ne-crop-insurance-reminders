@@ -60,6 +60,27 @@ function do_login() {
     }
 }
 
+function save_profile() {
+    global $db;
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $password = $_POST['new_password'];
+    $password_confirm = $_POST['password_confirm'];
+    if ($password !== $password_confirm) {
+        $_SESSION['error'] = 'Passwords do not match';
+        header('Location: /profile');
+        exit;
+    }
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $sql = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', email = '$email', phone = '$phone', password = '$password' WHERE id = " . $_SESSION['user_id'];
+    $db->exec($sql);
+    $_SESSION['success'] = 'Profile updated successfully';
+    header('Location: /profile');
+    exit;
+}
+
 function do_logout() {
     session_destroy();
     header('Location: /');

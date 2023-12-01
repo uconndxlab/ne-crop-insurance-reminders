@@ -15,7 +15,7 @@
 <body>
 <header>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
+  <div class="container">
     <a class="navbar-brand" href="#">Crop Insurance Alerts</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -23,10 +23,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Management Dashboard</a>
+          <a class="nav-link
+          <?php if ($_SERVER['REQUEST_URI'] == '/') : ?>
+            active
+          <?php endif; ?>
+          " aria-current="page" href="/">Management Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/profile">My Grower Profile</a>
+          <a class="
+          
+          <?php if ($_SERVER['REQUEST_URI'] == '/profile') : ?>
+            active
+          <?php endif; ?>
+          nav-link" href="/profile">My Grower Profile</a>
         </li>
       </ul>
     </div>
@@ -34,7 +43,7 @@
     <div class="d-flex">
         <?php if (isset($_SESSION['user_id'])) : ?>
             <span class="me-3">Welcome, <?php echo $_SESSION['firstname']; ?></span>
-            <a href="/logout" class="btn btn-danger">Logout</a>=
+            <a href="/logout" class="btn btn-danger">Logout</a>
         <?php else : ?>
             <a href="/login" class="btn btn-primary me-2">Login</a>
             <a href="/register" class="btn btn-secondary">Register</a>
