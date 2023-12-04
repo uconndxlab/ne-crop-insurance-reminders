@@ -1,4 +1,4 @@
-<div class="page page-home container-fluid">
+<div class="page page-home container">
     <header class="page-header">
         <h2>Management Dashboard</h2>
     </header>
@@ -7,11 +7,11 @@
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="cropsHeading">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cropsCollapse" aria-expanded="true" aria-controls="cropsCollapse">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cropsCollapse" aria-expanded="false" aria-controls="cropsCollapse">
                         Crops
                     </button>
                 </h2>
-                <div id="cropsCollapse" class="accordion-collapse collapse show" aria-labelledby="cropsHeading" data-bs-parent="#accordionSections">
+                <div id="cropsCollapse" class="accordion-collapse collapse" aria-labelledby="cropsHeading" data-bs-parent="#accordionSections">
                     <div class="accordion-body">
                         <?php
                         $crops = get_all_crops();
@@ -26,7 +26,7 @@
                                         <input type="text" name="crop" id="crop">
                                         <button type="submit" class="btn btn-primary">Add Crop</button>
                                     </div>
-                                    
+
                                 </div>
                             </form>
                         </div>
@@ -44,13 +44,6 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <form action="/crops" method="post">
-                            <div class="mb-3">
-                            <label for="crop">Crops</label>
-                            <input type="text" name="crop" id="crop">
-                            <button type="submit">Add Crop</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -64,19 +57,19 @@
                 <div id="statesCollapse" class="accordion-collapse collapse" aria-labelledby="statesHeading" data-bs-parent="#accordionSections">
                     <div class="accordion-body">
                         <div class="card">
-                        <form action="/states" method="post">
-                            <h5 class="card-header">Add State</h5>
-                            <div class="card-body">
-                                
+                            <form action="/states" method="post">
+                                <h5 class="card-header">Add State</h5>
+                                <div class="card-body">
+
                                     <div class="mb-3">
                                         <label for="state">State</label>
                                         <input type="text" name="state" id="state">
                                         <button type="submit" class="btn btn-primary">Add State</button>
                                     </div>
-                                
-                           
-                                
-                            </div>
+
+
+
+                                </div>
                             </form>
                         </div>
 
@@ -94,7 +87,9 @@
                                 foreach ($states as $state) {
                                     echo '<tr>';
                                     echo '<td>' . $state['state'] . '</td>';
-                                    echo '<td><a href="/states/delete">[ x ]</a></td>';
+                                    echo '<td>';
+                                    echo '<a href="/states/delete/' . $state['id'] . '" class="btn btn-danger">Delete</a>';
+                                    echo '</td>';
                                     echo '</tr>';
                                 }
                                 ?>
@@ -118,7 +113,7 @@
                         <div class="card">
                             <h5 class="card-header">Add Deadline</h5>
                             <div class="card-body">
-                               
+
                                 <form action="/deadlines" method="post">
                                     <div class="mb-3">
                                         <label for="state">State</label>
@@ -146,7 +141,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Add Deadline</button>
-                                    
+
                                 </form>
                             </div>
                         </div>
@@ -171,12 +166,43 @@
                             }
                             ?>
                         </table>
-
-
-
                     </div>
                 </div>
             </div>
+            <!-- users -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="usersHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersCollapse" aria-expanded="false" aria-controls="usersCollapse">
+                        Users
+                    </button>
+                </h2>
+                <div id="usersCollapse" class="accordion-collapse collapse" aria-labelledby="usersHeading" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $users = get_all_users();
+                                foreach ($users as $user) {
+                                    echo '<tr>';
+                                    echo '<td>' . $user['firstname'] . '</td>';
+                                    echo '<td>' . $user['lastname'] . '</td>';
+                                    echo '<td>' . $user['email'] . '</td>';
+                                    echo '<td><a href="/users/delete/' . $user['id'] . '" class="btn btn-danger">Delete</a></td>';
+                                    echo '</tr>';
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
