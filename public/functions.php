@@ -2,6 +2,20 @@
 
 $db = new SQLite3('../db.sqlite');
 
+function check_session() {
+    if(!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit;
+    } else {
+        // get the latest user info from the database
+        $user = get_logged_in_user();
+        $_SESSION['firstname'] = $user['firstname'];
+        $_SESSION['lastname'] = $user['lastname'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['phone'] = $user['phone'];
+    }
+}
+
 function do_register() {
     global $db;
     $firstname = $_POST['firstname'];
@@ -50,6 +64,8 @@ function do_login() {
     if (password_verify($password, $row['password'])) {
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['firstname'] = $row['firstname'];
+        $_SESSION['lastname'] = $row['lastname'];
+
         $_SESSION['success'] = 'You are now logged in as ' . $row['email'];
         header('Location: /profile');
         exit;
@@ -58,27 +74,6 @@ function do_login() {
         header('Location: /');
         exit;
     }
-}
-
-function save_profile() {
-    global $db;
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $password = $_POST['new_password'];
-    $password_confirm = $_POST['password_confirm'];
-    if ($password !== $password_confirm) {
-        $_SESSION['error'] = 'Passwords do not match';
-        header('Location: /profile');
-        exit;
-    }
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', email = '$email', phone = '$phone', password = '$password' WHERE id = " . $_SESSION['user_id'];
-    $db->exec($sql);
-    $_SESSION['success'] = 'Profile updated successfully';
-    header('Location: /profile');
-    exit;
 }
 
 function do_logout() {
@@ -91,6 +86,56 @@ function do_layout($file) {
     require_once 'layouts/header.php';
     require_once  $file . '.php';
     require_once 'layouts/footer.php';
+}
+
+function save_profile($user_id=0) {
+    global $db;
+    if($user_id) {
+        $sql = "UPDATE users SET firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
+    } else {
+        $sql = "INSERT INTO users (firstname, lastname, email, phone) VALUES ('" . $_POST['firstname'] . "', '" . $_POST['lastname'] . "', '" . $_POST['email'] . "', '" . $_POST['phone'] . "')";
+    }
+
+    if($db->exec($sql)) {
+        $_SESSION['success'] = 'Profile saved successfully';
+        header('Location: /profile');
+        exit;
+    } else {
+        $_SESSION['error'] = 'Error saving profile';
+        header('Location: /profile');
+        exit;
+    }
+}
+
+function save_crop($crop_id = 0) {
+    global $db;
+    if ($crop_id) {
+        $sql = "UPDATE crops SET crop = '" . $_POST['crop'] . "' WHERE id = $crop_id";
+    } else {
+        $sql = "INSERT INTO crops (crop) VALUES ('" . $_POST['crop'] . "')";
+    }
+
+    if($db->exec($sql)) {
+        $_SESSION['success'] = 'Crop saved successfully';
+        header('Location: /');
+        exit;
+    } else {
+        $_SESSION['error'] = 'Error saving crop';
+        header('Location: /');
+        exit;
+    }
+
+}
+
+function delete_crop($id) {
+    global $db;
+    $crop_id = $id;
+    $sql = "DELETE FROM crops WHERE id = $crop_id";
+    $db->exec($sql);
+    $_SESSION['success'] = 'Crop deleted successfully';
+    header('Location: /');
+    exit;
+
 }
 
 function get_all_users() {

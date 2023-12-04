@@ -12,23 +12,23 @@ $crops=get_all_crops();
     <div class="row mt-3">
         <div class="col-md-6">
             <h3>Basic Information</h3>
-            <form action="/post/profile" method="post">
+            <form action="/post/profile/save" method="post">
                 <div class="mb-3">
                     <label for="firstname">First Name</label>
-                    <input type="text" name="firstname" id="firstname" value="<?php echo $_SESSION['user']['firstname']; ?>">
+                    <input type="text" name="firstname" id="firstname" value="<?php echo $_SESSION['firstname']; ?>">
                 </div>
                 <div class="mb-3">
                     <label for="lastname">Last Name</label>
-                    <input type="text" name="lastname" id="lastname" value="<?php echo $_SESSION['user']['lastname']; ?>">
+                    <input type="text" name="lastname" id="lastname" value="<?php echo $_SESSION['lastname']; ?>">
                 </div>
                 <div class="mb-3">
                     <label for="email">Email Address</label>
-                    <input type="email" name="email" id="email" value="<?php echo $_SESSION['user']['email']; ?>">
+                    <input type="email" name="email" id="email" value="<?php echo $_SESSION['email']; ?>">
                 </div>
 
                 <div class="mb-3">
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" id="phone" value="<?php echo $_SESSION['user']['phone']; ?>">
+                    <input type="text" name="phone" id="phone" value="<?php echo $_SESSION['phone']; ?>">
                 </div>
 
 

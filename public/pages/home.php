@@ -18,7 +18,7 @@
                         ?>
 
                         <div class="card">
-                            <form action="/crops" method="post">
+                            <form action="/post/crop/save" method="post">
                                 <h5 class="card-header">Add Crop</h5>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -38,7 +38,10 @@
                                     <tr>
                                         <td><?php echo $crop['crop']; ?></td>
                                         <td>
-                                            <a class="btn btn-danger" href="/crops/delete/<?php echo $crop['id']; ?>">delete</a>
+                                            <form action="/post/crop/delete" method="post">
+                                                <input type="hidden" name="crop_id" value="<?php echo $crop['id']; ?>">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

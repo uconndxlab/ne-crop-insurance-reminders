@@ -1,6 +1,11 @@
 <?php
 session_start();
 require_once 'functions.php';
+check_session();
+
+// get the request method
+$method = $_SERVER['REQUEST_METHOD'];
+
 
 switch($_SERVER['REQUEST_URI']) {
     case '/':
@@ -23,6 +28,20 @@ switch($_SERVER['REQUEST_URI']) {
         break;
     case '/register':
         do_layout('pages/register');
+        break;
+    // case post/crop/delete/{id}
+    case '/post/crop/delete':
+        $crop_id = $_POST['crop_id'];
+        delete_crop($crop_id);
+        break;
+    // case post/crop/save/
+    case '/post/crop/save':
+        $crop_id = $_POST['crop_id'];
+        save_crop($crop_id);
+        break;
+    case '/post/profile/save':
+        $user_id = $_SESSION['user_id'];
+        save_profile($user_id);
         break;
     default:
         // set http response code to 404
