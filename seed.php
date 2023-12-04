@@ -60,10 +60,8 @@ $db->exec('CREATE TABLE IF NOT EXISTS crops_states_deadlines (
 /** create deadlines_reminders table */
 $db->exec('CREATE TABLE IF NOT EXISTS deadlines_reminders (
     id INTEGER PRIMARY KEY,
-    crop_id INTEGER NOT NULL,
-    state_id INTEGER NOT NULL,
     deadline_id INTEGER NOT NULL,
-    reminder_time DATETIME NOT NULL,
+    reminder_send_time DATETIME NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
 
@@ -122,3 +120,15 @@ foreach ($crops as $crop) {
 $db->exec('INSERT INTO crops_states_deadlines (crop_id, state_id, deadline_name, deadline) VALUES (1, 1, "sales_closing", "2023-12-01")');
 $db->exec('INSERT INTO crops_states_deadlines (crop_id, state_id, deadline_name, deadline) VALUES (1, 1, "acreage_reporting", "2023-12-01")');
 $db->exec('INSERT INTO crops_states_deadlines (crop_id, state_id, deadline_name, deadline) VALUES (1, 1, "production_reporting", "2023-12-01")');
+
+/** create a reminder for deadline #1, scheduled for 1 day earlier than the deadline value, calculated from the deadline value */
+/** get deadline #1 */
+$results = $db->query('SELECT * FROM crops_states_deadlines WHERE id = 1');
+$deadline = $results->fetchArray();
+
+$reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline['deadline'] . ' - 1 day'));
+
+/** insert reminder */
+$db->exec('INSERT INTO deadlines_reminders (deadline_id, reminder_send_time) VALUES (1, "' . $reminder_send_time . '")');
+
+

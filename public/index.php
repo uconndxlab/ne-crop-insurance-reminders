@@ -27,6 +27,11 @@ switch($_SERVER['REQUEST_URI']) {
     default:
         // set http response code to 404
         http_response_code(404);
-        echo '404';
+
+        // the route attempted was: $_SERVER['REQUEST_URI'] and it was not found
+
+        // show the 404 page
+        echo "404. " . $_SERVER['REQUEST_URI'] . " not found";
+
         break;
 }

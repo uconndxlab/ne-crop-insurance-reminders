@@ -93,6 +93,16 @@ function do_layout($file) {
     require_once 'layouts/footer.php';
 }
 
+function get_all_users() {
+    global $db;
+    $results = $db->query('SELECT * FROM users');
+    $users = [];
+    while ($row = $results->fetchArray()) {
+        $users[] = $row;
+    }
+    return $users;
+}
+
 function get_all_crops() {
     global $db;
     $results = $db->query('SELECT * FROM crops');
@@ -127,6 +137,13 @@ function get_crop_name($id) {
     return $row['crop'];
 }
 
+function get_deadline($id) {
+    global $db;
+    $results = $db->query('SELECT * FROM crops_states_deadlines WHERE id = ' . $id);
+    $row = $results->fetchArray();
+    return $row;
+}
+
 function get_all_deadlines() {
     global $db;
     $results = $db->query('SELECT * FROM crops_states_deadlines');
@@ -137,6 +154,26 @@ function get_all_deadlines() {
         $deadlines[] = $row;
     }
     return $deadlines;
+}
+
+function get_all_reminders() {
+    global $db;
+    $sql = 'SELECT * FROM deadlines_reminders';
+    // left join on deadlines table and crop and state so we can have the name of the deadline, crop, and state
+    $sql = 'SELECT deadlines_reminders.id, deadlines_reminders.deadline_id, deadlines_reminders.reminder_send_time, crops_states_deadlines.deadline_name, crops_states_deadlines.deadline, crops_states_deadlines.state_id, crops_states_deadlines.crop_id, states.state, crops.crop FROM deadlines_reminders LEFT JOIN crops_states_deadlines ON deadlines_reminders.deadline_id = crops_states_deadlines.id LEFT JOIN states ON crops_states_deadlines.state_id = states.id LEFT JOIN crops ON crops_states_deadlines.crop_id = crops.id';
+    $results = $db->query($sql);
+    $reminders = [];
+    while ($row = $results->fetchArray()) {
+        $row['deadline_id'] = get_deadline($row['deadline_id'])['deadline_name'];
+        $row['reminder_send_time'] = $row['reminder_send_time'];
+        $row['deadline_name'] = $row['deadline_name'];
+        $row['deadline'] = $row['deadline'];
+        $row['state'] = $row['state'];
+
+
+        $reminders[] = $row;
+    }
+    return $reminders;
 }
 
 function get_logged_in_user() {
