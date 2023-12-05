@@ -3,12 +3,19 @@
 $db = new SQLite3('../db.sqlite');
 
 function check_session() {
+
     if(!isset($_SESSION['user_id'])) {
+     // if we're on the login page, don't redirect
+        if($_SERVER['REQUEST_URI'] === '/login') {
+            return;
+        }
+        $_SESSION['error'] = 'You must be logged in to view that page';
         header('Location: /login');
         exit;
     } else {
         // get the latest user info from the database
         $user = get_logged_in_user();
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['firstname'] = $user['firstname'];
         $_SESSION['lastname'] = $user['lastname'];
         $_SESSION['email'] = $user['email'];
@@ -40,6 +47,8 @@ function do_register() {
     $db->exec($sql);
     $_SESSION['user_id'] = $db->lastInsertRowID();
     $_SESSION['firstname'] = $firstname;
+    $_SESSION['lastname'] = $lastname;
+    $_SESSION['email'] = $email;
     $_SESSION['success'] = 'You are now registered and logged in as ' . $email;
     header('Location: /profile');
     exit;
@@ -65,6 +74,9 @@ function do_login() {
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['firstname'] = $row['firstname'];
         $_SESSION['lastname'] = $row['lastname'];
+        $_SESSION['email'] = $row['email'];
+        $_SESSION['phone'] = $row['phone'];
+
 
         $_SESSION['success'] = 'You are now logged in as ' . $row['email'];
         header('Location: /profile');
@@ -124,6 +136,67 @@ function save_crop($crop_id = 0) {
         header('Location: /');
         exit;
     }
+}
+
+function save_state($state_id=0) {
+    global $db;
+    if($state_id) {
+        $sql = "UPDATE states SET state = '" . $_POST['state'] . "' WHERE id = $state_id";
+    } else {
+        $sql = "INSERT INTO states (state) VALUES ('" . $_POST['state'] . "')";
+    }
+
+    if($db->exec($sql)) {
+        $_SESSION['success'] = 'State saved successfully';
+        header('Location: /');
+        exit;
+    } else {
+        $_SESSION['error'] = 'Error saving state';
+        header('Location: /');
+        exit;
+    }
+}
+
+function save_user_crop($user_id=0, $state_id=0, $crop_id=0) {
+
+    global $db;
+    if($user_id && $state_id && $crop_id) {
+        $sql = "INSERT INTO user_crops (user_id, state_id, crop_id) VALUES ($user_id, $state_id, $crop_id)";
+    }
+
+    if($db->exec($sql)) {
+        $_SESSION['success'] = 'The product ' . $_POST['crop'] . ' was saved successfully. You will now receive alerts for this crop.';
+        header('Location: /profile');
+        exit;
+    } else {
+        $_SESSION['error'] = 'Error saving product';
+        header('Location: /profile');
+        exit;
+    }
+    
+}
+
+function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=0, $deadline="") {
+    global $db;
+
+    // die all the vars
+    if ($deadline_id) {
+        $sql = "UPDATE crops_states_deadlines SET deadline_name = '" . $deadline_name . "', state_id = '" . $state_id . "', crop_id = '" . $crop_id . "', deadline = '" . $deadline . "' WHERE id = $deadline_id";
+    } else {
+        $sql = "INSERT INTO crops_states_deadlines (deadline_name, state_id, crop_id, deadline) 
+        VALUES ('" . $deadline_name . "', '" . $state_id . "', '" . $crop_id . "', '" . $deadline . "')";
+    
+    }
+
+    if($db->exec($sql)) {
+        $_SESSION['success'] = 'Deadline saved successfully';
+        header('Location: /');
+        exit;
+    } else {
+        $_SESSION['error'] = 'Error saving deadline. Error: ' . $db->lastErrorMsg(). ' SQL: ' . $sql;
+        header('Location: /');
+        exit;
+    }
 
 }
 
@@ -135,7 +208,26 @@ function delete_crop($id) {
     $_SESSION['success'] = 'Crop deleted successfully';
     header('Location: /');
     exit;
+}
 
+function delete_state($id) {
+    global $db;
+    $state_id = $id;
+    $sql = "DELETE FROM states WHERE id = $state_id";
+    $db->exec($sql);
+    $_SESSION['success'] = 'State deleted successfully';
+    header('Location: /');
+    exit;
+}
+
+function delete_user_crop($id) {
+    global $db;
+    $user_crop_id = $id;
+    $sql = "DELETE FROM user_crops WHERE id = $user_crop_id";
+    $db->exec($sql);
+    $_SESSION['success'] = 'Product deleted successfully';
+    header('Location: /profile');
+    exit;
 }
 
 function get_all_users() {
@@ -166,6 +258,17 @@ function get_all_states() {
         $states[] = $row;
     }
     return $states;
+}
+
+function get_crops_by_user_id($user_id) {
+    global $db;
+    $sql = 'SELECT * FROM user_crops WHERE user_id = ' . $user_id;
+    $results = $db->query($sql);
+    $crops = [];
+    while ($row = $results->fetchArray()) {
+        $crops[] = $row;
+    }
+    return $crops;
 }
 
 function get_state_name($id) {

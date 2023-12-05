@@ -60,7 +60,7 @@
                 <div id="statesCollapse" class="accordion-collapse collapse" aria-labelledby="statesHeading" data-bs-parent="#accordionSections">
                     <div class="accordion-body">
                         <div class="card">
-                            <form action="/states" method="post">
+                            <form action="/post/state/save" method="post">
                                 <h5 class="card-header">Add State</h5>
                                 <div class="card-body">
 
@@ -91,7 +91,12 @@
                                     echo '<tr>';
                                     echo '<td>' . $state['state'] . '</td>';
                                     echo '<td>';
-                                    echo '<a href="/states/delete/' . $state['id'] . '" class="btn btn-danger">Delete</a>';
+
+                                    echo '<form action="/post/state/delete" method="post">';
+                                    echo '<input type="hidden" name="state_id" value="' . $state['id'] . '">';
+                                    echo '<button type="submit" class="btn btn-danger">Delete</button>';
+                                    echo '</form>';
+                                   
                                     echo '</td>';
                                     echo '</tr>';
                                 }
@@ -117,10 +122,10 @@
                             <h5 class="card-header">Add Deadline</h5>
                             <div class="card-body">
 
-                                <form action="/deadlines" method="post">
+                                <form action="/post/deadline/save" method="post">
                                     <div class="mb-3">
                                         <label for="state">State</label>
-                                        <select name="state" id="state">
+                                        <select name="state_id" id="state_id">
                                             <?php foreach ($states as $state) : ?>
                                                 <option value="<?php echo $state['id']; ?>"><?php echo $state['state']; ?></option>
                                             <?php endforeach; ?>
@@ -128,7 +133,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="crop">Crop</label>
-                                        <select name="crop" id="crop">
+                                        <select name="crop_id" id="crop_id">
                                             <?php foreach ($crops as $crop) : ?>
                                                 <option value="<?php echo $crop['id']; ?>"><?php echo $crop['crop']; ?></option>
                                             <?php endforeach; ?>
