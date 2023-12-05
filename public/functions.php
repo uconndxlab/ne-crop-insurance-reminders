@@ -315,6 +315,32 @@ function get_all_deadlines() {
     return $deadlines;
 }
 
+function get_deadlines_by_user_id($user_id) {
+    global $db;
+    $sql = 'SELECT * FROM user_crops WHERE user_id = ' . $user_id;
+    $results = $db->query($sql);
+    $crops = [];
+    while ($row = $results->fetchArray()) {
+        $crops[] = $row;
+    }
+
+    $deadlines = [];
+    foreach ($crops as $crop) {
+        $sql = 'SELECT * FROM crops_states_deadlines WHERE crop_id = ' . $crop['crop_id'] . ' AND state_id = ' . $crop['state_id'];
+        $results = $db->query($sql);
+        while ($row = $results->fetchArray()) {
+            $row['state'] = get_state_name($row['state_id']);
+            $row['crop'] = get_crop_name($row['crop_id']);
+            $deadlines[] = $row;
+        }
+    }
+    
+    
+
+
+    return $deadlines;
+}
+
 function get_all_reminders() {
     global $db;
     $sql = 'SELECT * FROM deadlines_reminders';

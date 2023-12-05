@@ -118,7 +118,7 @@ $crops=get_all_crops();
                     <th>Deadline Date</th>
                 </tr>
                 <?php
-                $deadlines = get_all_deadlines($_SESSION['user_id']);
+                $deadlines = get_deadlines_by_user_id($_SESSION['user_id']);
                 foreach ($deadlines as $deadline) {
                     echo '<tr>';
                     echo '<td>' . $deadline['state'] . '</td>';
@@ -129,6 +129,12 @@ $crops=get_all_crops();
                 }
                 ?>
             </table>
+
+            <?php if (count($deadlines) == 0) : ?>
+                <div class="alert alert-info" role="alert">
+                    You have no deadlines. Subscribe to a product above to get started.
+                </div>
+            <?php endif; ?>
 
 
 
