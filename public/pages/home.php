@@ -161,6 +161,7 @@
                                 <th>Crop</th>
                                 <th>Deadline Name</th>
                                 <th>Deadline Date</th>
+                                <th>Delete</th>
                             </tr>
                             <?php
                             $deadlines = get_all_deadlines();
@@ -170,6 +171,10 @@
                                 echo '<td>' . $deadline['crop'] . '</td>';
                                 echo '<td>' . $deadline['deadline_name'] . '</td>';
                                 echo '<td>' . $deadline['deadline'] . '</td>';
+                                echo '<td>';
+                                echo '<form action="/post/deadline/delete" method="post">';
+                                echo '<input type="hidden" name="deadline_id" value="' . $deadline['id'] . '">';
+                                echo '<button type="submit" class="btn btn-danger">Delete</button>';
                                 echo '</tr>';
                             }
                             ?>

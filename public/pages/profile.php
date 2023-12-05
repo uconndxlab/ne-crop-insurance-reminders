@@ -98,7 +98,7 @@ $crops=get_all_crops();
                     echo '<tr>';
                     echo '<td>' . $state_name . '</td>';
                     echo '<td>' . $crop_name . '</td>';
-                    echo '<td><a href="/post/user_crop/delete/' . $user_crop['id'] . '" class="btn btn-danger">Remove</a></td>';
+                    echo '<td><form action="/post/user_crop/delete" method="post"><input type="hidden" name="user_crop_id" value="' . $user_crop['id'] . '"><button type="submit" class="btn btn-danger">Remove</button></form></td>';
                     echo '</tr>';
                 }
                 ?>

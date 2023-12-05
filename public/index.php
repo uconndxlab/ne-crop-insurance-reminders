@@ -81,6 +81,11 @@ switch($_SERVER['REQUEST_URI']) {
         //$deadline_name="", $state_id=0, $crop_id=0, $deadline=""
         save_deadline(0,$deadline_name, $state_id, $crop_id, $deadline);  
         break;
+    case '/post/deadline/delete':
+        check_session();
+        $deadline_id = $_POST['deadline_id'];
+        delete_deadline($deadline_id);
+        break;
     default:
         // set http response code to 404
         http_response_code(404);

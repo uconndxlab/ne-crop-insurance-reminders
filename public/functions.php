@@ -102,6 +102,7 @@ function do_layout($file) {
 
 function save_profile($user_id=0) {
     global $db;
+   
     if($user_id) {
         $sql = "UPDATE users SET firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
     } else {
@@ -225,8 +226,18 @@ function delete_user_crop($id) {
     $user_crop_id = $id;
     $sql = "DELETE FROM user_crops WHERE id = $user_crop_id";
     $db->exec($sql);
-    $_SESSION['success'] = 'Product deleted successfully';
+    $_SESSION['success'] = 'Product removed from your profile. You will no longer receive alerts for this product.';
     header('Location: /profile');
+    exit;
+}
+
+function delete_deadline($id) {
+    global $db;
+    $deadline_id = $id;
+    $sql = "DELETE FROM crops_states_deadlines WHERE id = $deadline_id";
+    $db->exec($sql);
+    $_SESSION['success'] = 'Deadline deleted successfully';
+    header('Location: /');
     exit;
 }
 
