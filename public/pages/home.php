@@ -18,7 +18,7 @@
                         ?>
 
                         <div class="card">
-                            <form action="/crops" method="post">
+                            <form action="/post/crop/save" method="post">
                                 <h5 class="card-header">Add Crop</h5>
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -38,7 +38,10 @@
                                     <tr>
                                         <td><?php echo $crop['crop']; ?></td>
                                         <td>
-                                            <a class="btn btn-danger" href="/crops/delete/<?php echo $crop['id']; ?>">delete</a>
+                                            <form action="/post/crop/delete" method="post">
+                                                <input type="hidden" name="crop_id" value="<?php echo $crop['id']; ?>">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -57,7 +60,7 @@
                 <div id="statesCollapse" class="accordion-collapse collapse" aria-labelledby="statesHeading" data-bs-parent="#accordionSections">
                     <div class="accordion-body">
                         <div class="card">
-                            <form action="/states" method="post">
+                            <form action="/post/state/save" method="post">
                                 <h5 class="card-header">Add State</h5>
                                 <div class="card-body">
 
@@ -88,7 +91,12 @@
                                     echo '<tr>';
                                     echo '<td>' . $state['state'] . '</td>';
                                     echo '<td>';
-                                    echo '<a href="/states/delete/' . $state['id'] . '" class="btn btn-danger">Delete</a>';
+
+                                    echo '<form action="/post/state/delete" method="post">';
+                                    echo '<input type="hidden" name="state_id" value="' . $state['id'] . '">';
+                                    echo '<button type="submit" class="btn btn-danger">Delete</button>';
+                                    echo '</form>';
+                                   
                                     echo '</td>';
                                     echo '</tr>';
                                 }
@@ -114,10 +122,10 @@
                             <h5 class="card-header">Add Deadline</h5>
                             <div class="card-body">
 
-                                <form action="/deadlines" method="post">
+                                <form action="/post/deadline/save" method="post">
                                     <div class="mb-3">
                                         <label for="state">State</label>
-                                        <select name="state" id="state">
+                                        <select name="state_id" id="state_id">
                                             <?php foreach ($states as $state) : ?>
                                                 <option value="<?php echo $state['id']; ?>"><?php echo $state['state']; ?></option>
                                             <?php endforeach; ?>
@@ -125,7 +133,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="crop">Crop</label>
-                                        <select name="crop" id="crop">
+                                        <select name="crop_id" id="crop_id">
                                             <?php foreach ($crops as $crop) : ?>
                                                 <option value="<?php echo $crop['id']; ?>"><?php echo $crop['crop']; ?></option>
                                             <?php endforeach; ?>
@@ -153,6 +161,7 @@
                                 <th>Crop</th>
                                 <th>Deadline Name</th>
                                 <th>Deadline Date</th>
+                                <th>Delete</th>
                             </tr>
                             <?php
                             $deadlines = get_all_deadlines();
@@ -162,6 +171,10 @@
                                 echo '<td>' . $deadline['crop'] . '</td>';
                                 echo '<td>' . $deadline['deadline_name'] . '</td>';
                                 echo '<td>' . $deadline['deadline'] . '</td>';
+                                echo '<td>';
+                                echo '<form action="/post/deadline/delete" method="post">';
+                                echo '<input type="hidden" name="deadline_id" value="' . $deadline['id'] . '">';
+                                echo '<button type="submit" class="btn btn-danger">Delete</button>';
                                 echo '</tr>';
                             }
                             ?>
