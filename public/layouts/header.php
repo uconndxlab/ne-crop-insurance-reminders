@@ -54,6 +54,7 @@
 </header>
 
 <main id="app" class="mt-4 mb-4">
+  <div class="container">
     <?php if (isset($_SESSION['error'])) : ?>
         <div class="alert alert-danger" role="alert">
             <?php 
@@ -73,4 +74,4 @@
             
         </div>
     <?php endif; ?>
-  
+  </div>
