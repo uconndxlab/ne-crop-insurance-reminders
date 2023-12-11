@@ -30,6 +30,7 @@ function do_register() {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $password_confirm = $_POST['password_confirm'];
+    $phone = "";
     if ($password !== $password_confirm) {
         $_SESSION['error'] = 'Passwords do not match';
         header('Location: /');
@@ -42,13 +43,14 @@ function do_register() {
         exit;
     }
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$password')";
+    $sql = "INSERT INTO users (firstname, lastname, email, phone, password) VALUES ('$firstname', '$lastname', '$email', '$phone', '$password')";
    
     $db->exec($sql);
     $_SESSION['user_id'] = $db->lastInsertRowID();
     $_SESSION['firstname'] = $firstname;
     $_SESSION['lastname'] = $lastname;
     $_SESSION['email'] = $email;
+    $_SESSION['phone'] = $phone;
     $_SESSION['success'] = 'You are now registered and logged in as ' . $email;
     header('Location: /profile');
     exit;
@@ -186,6 +188,20 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
     } else {
         $sql = "INSERT INTO crops_states_deadlines (deadline_name, state_id, crop_id, deadline) 
         VALUES ('" . $deadline_name . "', '" . $state_id . "', '" . $crop_id . "', '" . $deadline . "')";
+        
+        // create a reminder for 1 day earlier
+        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 day'));
+        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
+
+        // create a reminder for 1 week earlier
+        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 week'));
+
+        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
+
+        // create a reminder for 1 month earlier
+        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 month'));
+        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
+    
     
     }
 
@@ -200,6 +216,22 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
     }
 
 }
+
+// deadlines_reminders (
+//     id INTEGER PRIMARY KEY,
+//     deadline_id INTEGER NOT NULL,
+//     reminder_send_time DATETIME NOT NULL,
+//     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+// )
+
+function save_deadline_reminder($deadline_id, $reminder_send_time) {
+    global $db;
+   
+        $sql = "INSERT INTO deadlines_reminders (deadline_id, reminder_send_time) VALUES ('" . $deadline_id . "', '" . $reminder_send_time . "')";
+        $db->exec($sql);
+    
+}       
+        
 
 function delete_crop($id) {
     global $db;
@@ -280,6 +312,26 @@ function get_crops_by_user_id($user_id) {
         $crops[] = $row;
     }
     return $crops;
+}
+
+function get_reminders_by_user_id($user_id) {
+    global $db;
+    // for each deadline by this user, get the reminders
+    $deadlines = get_deadlines_by_user_id($user_id);
+    $reminders = [];
+    foreach ($deadlines as $deadline) {
+        $sql = 'SELECT * FROM deadlines_reminders WHERE deadline_id = ' . $deadline['id'];
+        $results = $db->query($sql);
+        while ($row = $results->fetchArray()) {
+            print_r($row);
+            $row['deadline_name'] = $deadline['deadline_name'];
+            $row['deadline'] = $deadline['deadline'];
+            $row['state'] = $deadline['state'];
+            $row['crop'] = $deadline['crop'];
+            $reminders[] = $row;
+        }
+    }
+    return $reminders;
 }
 
 function get_state_name($id) {
