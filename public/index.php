@@ -13,7 +13,7 @@ switch($_SERVER['REQUEST_URI']) {
         do_layout('pages/home');
         break;
     case '/profile':
-
+        check_session();
         do_layout('pages/profile');
         break;
     case '/post/login':

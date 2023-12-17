@@ -323,7 +323,6 @@ function get_reminders_by_user_id($user_id) {
         $sql = 'SELECT * FROM deadlines_reminders WHERE deadline_id = ' . $deadline['id'];
         $results = $db->query($sql);
         while ($row = $results->fetchArray()) {
-            print_r($row);
             $row['deadline_name'] = $deadline['deadline_name'];
             $row['deadline'] = $deadline['deadline'];
             $row['state'] = $deadline['state'];
@@ -400,14 +399,13 @@ function get_all_reminders() {
     $sql = 'SELECT deadlines_reminders.id, deadlines_reminders.deadline_id, deadlines_reminders.reminder_send_time, crops_states_deadlines.deadline_name, crops_states_deadlines.deadline, crops_states_deadlines.state_id, crops_states_deadlines.crop_id, states.state, crops.crop FROM deadlines_reminders LEFT JOIN crops_states_deadlines ON deadlines_reminders.deadline_id = crops_states_deadlines.id LEFT JOIN states ON crops_states_deadlines.state_id = states.id LEFT JOIN crops ON crops_states_deadlines.crop_id = crops.id';
     $results = $db->query($sql);
     $reminders = [];
+    
     while ($row = $results->fetchArray()) {
-        $row['deadline_id'] = get_deadline($row['deadline_id'])['deadline_name'];
-        $row['reminder_send_time'] = $row['reminder_send_time'];
-        $row['deadline_name'] = $row['deadline_name'];
-        $row['deadline'] = $row['deadline'];
-        $row['state'] = $row['state'];
-
-
+        echo "<pre>";
+        print_r($row);
+        echo "</pre>";
+        $row['deadline_id'] = get_deadline($row['deadline_id']);
+        $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
         $reminders[] = $row;
     }
     return $reminders;
