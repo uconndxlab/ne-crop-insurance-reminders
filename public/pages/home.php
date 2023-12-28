@@ -182,6 +182,42 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- auto generated reminders -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="remindersHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#remindersCollapse" aria-expanded="false" aria-controls="remindersCollapse">
+                        Reminders
+                    </button>
+                </h2>
+                <div id="remindersCollapse" class="accordion-collapse collapse" aria-labelledby="remindersHeading" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                        <table class="table">
+                            <tr>
+                                <th>State</th>
+                                <th>Crop</th>
+                                <th>Deadline Name</th>
+                                <th>Deadline Date</th>
+                                <th>Days Remaining</th>
+                            </tr>
+                            <?php
+                            $reminders = get_all_reminders();
+                            foreach ($reminders as $reminder) {
+                                echo '<tr>';
+                                echo '<td>' . $reminder['state'] . '</td>';
+                                echo '<td>' . $reminder['crop'] . '</td>';
+                                echo '<td>' . $reminder['deadline_name'] . '</td>';
+                                echo '<td>' . $reminder['deadline'] . '</td>';
+                                echo '<td>' . $reminder['days_remaining'] . '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- users -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="usersHeading">
