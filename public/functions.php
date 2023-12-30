@@ -402,10 +402,19 @@ function get_all_reminders() {
     
     while ($row = $results->fetchArray()) {
         echo "<pre>";
-        print_r($row);
+        // print_r($row);
         echo "</pre>";
         $row['deadline_id'] = get_deadline($row['deadline_id']);
-        $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
+        // $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
+        
+        // Check if $row['deadline'] is not null before using date_create()
+        if ($row['deadline'] !== null) {
+            $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
+        } else {
+            // Handle the case when $row['deadline'] is null
+            $row['days_remaining'] = null; // or provide a default value
+        }
+        
         $reminders[] = $row;
     }
     return $reminders;
