@@ -409,13 +409,16 @@ function get_all_reminders() {
         
         // Check if $row['deadline'] is not null before using date_create()
         if ($row['deadline'] !== null) {
-            $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
-        } else {
-            // Handle the case when $row['deadline'] is null
-            $row['days_remaining'] = null; // or provide a default value
+            $deadlineDate = date_create($row['deadline']);
+            $currentDate = date_create(date('Y-m-d'));
+            $interval = date_diff($currentDate, $deadlineDate);
+
+            // Check if the difference is exactly 2 weeks
+            if ($interval->format('%a') == 14) {
+                $row['days_remaining'] = $interval->format('%a');
+                $reminders[] = $row;
+            }
         }
-        
-        $reminders[] = $row;
     }
     return $reminders;
 }
