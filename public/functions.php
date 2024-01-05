@@ -189,19 +189,9 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
         $sql = "INSERT INTO crops_states_deadlines (deadline_name, state_id, crop_id, deadline) 
         VALUES ('" . $deadline_name . "', '" . $state_id . "', '" . $crop_id . "', '" . $deadline . "')";
         
-        // create a reminder for 1 day earlier
-        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 day'));
+        // create a reminder for 2 weeks earlier
+        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -2 weeks'));
         save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
-
-        // create a reminder for 1 week earlier
-        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 week'));
-
-        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
-
-        // create a reminder for 1 month earlier
-        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -1 month'));
-        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
-    
     
     }
 
@@ -413,11 +403,12 @@ function get_all_reminders() {
             $currentDate = date_create(date('Y-m-d'));
             $interval = date_diff($currentDate, $deadlineDate);
 
-            // Check if the difference is exactly 2 weeks
-            if ($interval->format('%a') == 14) {
+            // Check if the difference is less than or equal to 14 days
+            if ($interval->format('%a') <= 14 && $interval->format('%a') >= 0) {
                 $row['days_remaining'] = $interval->format('%a');
                 $reminders[] = $row;
             }
+
         }
     }
     return $reminders;
