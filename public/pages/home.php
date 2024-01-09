@@ -185,7 +185,7 @@
 
 
             <!-- auto generated reminders -->
-            <div class="accordion-item">
+            <!-- <div class="accordion-item">
                 <h2 class="accordion-header" id="remindersHeading">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#remindersCollapse" aria-expanded="false" aria-controls="remindersCollapse">
                         Reminders
@@ -202,21 +202,21 @@
                                 <th>Days Remaining</th>
                             </tr>
                             <?php
-                            $reminders = get_all_reminders();
-                            foreach ($reminders as $reminder) {
-                                echo '<tr>';
-                                echo '<td>' . $reminder['state'] . '</td>';
-                                echo '<td>' . $reminder['crop'] . '</td>';
-                                echo '<td>' . $reminder['deadline_name'] . '</td>';
-                                echo '<td>' . $reminder['deadline'] . '</td>';
-                                echo '<td>' . $reminder['days_remaining'] . '</td>';
-                                echo '</tr>';
-                            }
+                            //$reminders = get_all_reminders();
+                            // foreach ($reminders as $reminder) {
+                            //     echo '<tr>';
+                            //     echo '<td>' . $reminder['state'] . '</td>';
+                            //     echo '<td>' . $reminder['crop'] . '</td>';
+                            //     echo '<td>' . $reminder['deadline_name'] . '</td>';
+                            //     echo '<td>' . $reminder['deadline'] . '</td>';
+                            //     echo '<td>' . $reminder['days_remaining'] . '</td>';
+                            //     echo '</tr>';
+                            // }
                             ?>
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- users -->
             <div class="accordion-item">

@@ -1,5 +1,5 @@
 <?php
-
+// the path to the sqlite database needs to be absolute, not relative
 $db = new SQLite3('../db.sqlite');
 
 function check_session() {
@@ -188,10 +188,6 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
     } else {
         $sql = "INSERT INTO crops_states_deadlines (deadline_name, state_id, crop_id, deadline) 
         VALUES ('" . $deadline_name . "', '" . $state_id . "', '" . $crop_id . "', '" . $deadline . "')";
-        
-        // create a reminder for 2 weeks earlier
-        $reminder_send_time = date('Y-m-d H:i:s', strtotime($deadline . ' -2 weeks'));
-        save_deadline_reminder($db->lastInsertRowID(), $reminder_send_time);
     
     }
 
@@ -356,6 +352,21 @@ function get_all_deadlines() {
     return $deadlines;
 }
 
+function get_deadlines_by_date($date){
+    global $db;
+    $query = 'SELECT * FROM crops_states_deadlines WHERE deadline = "' . $date . '"';
+    $results = $db->query($query);  
+    $deadlines = [];
+    while ($row = $results->fetchArray()) {
+        $row['state'] = get_state_name($row['state_id']);
+        $row['crop'] = get_crop_name($row['crop_id']);
+        $deadlines[] = $row;
+    }
+    return $deadlines;
+}
+
+
+
 function get_deadlines_by_user_id($user_id) {
     global $db;
     $sql = 'SELECT * FROM user_crops WHERE user_id = ' . $user_id;
@@ -375,10 +386,6 @@ function get_deadlines_by_user_id($user_id) {
             $deadlines[] = $row;
         }
     }
-    
-    
-
-
     return $deadlines;
 }
 
@@ -395,21 +402,10 @@ function get_all_reminders() {
         // print_r($row);
         echo "</pre>";
         $row['deadline_id'] = get_deadline($row['deadline_id']);
-        // $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
         
-        // Check if $row['deadline'] is not null before using date_create()
-        if ($row['deadline'] !== null) {
-            $deadlineDate = date_create($row['deadline']);
-            $currentDate = date_create(date('Y-m-d'));
-            $interval = date_diff($currentDate, $deadlineDate);
-
-            // Check if the difference is less than or equal to 14 days
-            if ($interval->format('%a') <= 14 && $interval->format('%a') >= 0) {
-                $row['days_remaining'] = $interval->format('%a');
-                $reminders[] = $row;
-            }
-
-        }
+        $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
+        
+        $reminders[] = $row;
     }
     return $reminders;
 }

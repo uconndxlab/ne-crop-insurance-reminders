@@ -136,9 +136,8 @@ $crops=get_all_crops();
                 </div>
             <?php endif; ?>
 
-            <h3>My Reminders</h3>
+            <!-- <h3>My Reminders</h3>
 
-            <!-- table of all the reminders for each deadline -->
             <table class="table">
                 <tr>
                     <th>State</th>
@@ -148,19 +147,19 @@ $crops=get_all_crops();
                     <th>Remove</th>
                 </tr>
                 <?php
-                $reminders = get_reminders_by_user_id($_SESSION['user_id']);
-                foreach ($reminders as $reminder) {
-                    echo '<tr>';
-                    echo '<td>' . $reminder['state'] . '</td>';
-                    echo '<td>' . $reminder['crop'] . '</td>';
-                    echo '<td>' . $reminder['deadline_name'] . '</td>';
-                    echo '<td>' . $reminder['reminder_send_time'] . '</td>';
-                    echo '<td><form action="/post/reminder/delete" method="post"><input type="hidden" name="reminder_id" value="' . $reminder['id'] . '"><button type="submit" class="btn btn-danger">Remove</button></form></td>';
-                    echo '</tr>';
-                }
+               // $reminders = get_reminders_by_user_id($_SESSION['user_id']);
+                // foreach ($reminders as $reminder) {
+                //     echo '<tr>';
+                //     echo '<td>' . $reminder['state'] . '</td>';
+                //     echo '<td>' . $reminder['crop'] . '</td>';
+                //     echo '<td>' . $reminder['deadline_name'] . '</td>';
+                //     echo '<td>' . $reminder['reminder_send_time'] . '</td>';
+                //     echo '<td><form action="/post/reminder/delete" method="post"><input type="hidden" name="reminder_id" value="' . $reminder['id'] . '"><button type="submit" class="btn btn-danger">Remove</button></form></td>';
+                //     echo '</tr>';
+                // }
                 ?>
 
-            </table>
+            </table> -->
             
 
 
