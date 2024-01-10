@@ -365,6 +365,13 @@ function get_deadlines_by_date($date){
     return $deadlines;
 }
 
+function get_user($id) {
+    global $db;
+    $results = $db->query('SELECT * FROM users WHERE id = ' . $id);
+    $row = $results->fetchArray();
+    return $row;
+}
+
 function get_users_for_deadline($deadline) {
     global $db;
     $query = 'SELECT * FROM user_crops WHERE crop_id = "' . $deadline['crop_id'] . '" AND state_id = "' . $deadline['state_id']. '"';
@@ -429,4 +436,19 @@ function get_logged_in_user() {
     $results = $db->query('SELECT * FROM users WHERE id = ' . $user_id);
     $row = $results->fetchArray();
     return $row;
+}
+
+function send_reminder_email($user,$deadline){
+    $to = $user['email'];
+    $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
+    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . ".\n\nThanks,\n\nThe Crop Alerts App";
+    $headers = "From: dx@uconn.edu";
+
+    // echo out the email for testing
+    echo "Sending email to: " . $to . "\n";
+    echo "Subject: " . $subject . "\n";
+    echo "Message: " . $message . "\n";
+    echo "Headers: " . $headers . "\n";
+
+
 }
