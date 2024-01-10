@@ -161,8 +161,22 @@ $crops=get_all_crops();
 
             </table> -->
             
+            <h3 class="mt-5">Policy Documents</h3>
+            <ul>
+                <?php
+                // Specify the path to your PDF documents
+                $pdfDirectory = 'policy_documents/';
 
+                // Get all PDF files from the directory
+                $pdfFiles = glob($pdfDirectory . '*.pdf');
 
+                // Generate links for each PDF file without the ".pdf" extension
+                foreach ($pdfFiles as $pdfFile) {
+                    $pdfFileName = basename($pdfFile, '.pdf');
+                    echo '<li><a href="' . $pdfDirectory . $pdfFile . '" target="_blank">' . $pdfFileName . '</a></li>';
+                }
+                ?>
+            </ul>
 
         </div>
     </div>
