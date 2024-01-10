@@ -40,7 +40,7 @@
       </ul>
     </div>
     <!-- login/logout -->
-    <div class="d-flex">
+    <div class="d-flex align-items-center">
         <?php if (isset($_SESSION['user_id'])) : ?>
             <span class="me-3">Welcome, <?php echo $_SESSION['firstname']; ?></span>
             <a href="/logout" class="btn btn-danger">Logout</a>
