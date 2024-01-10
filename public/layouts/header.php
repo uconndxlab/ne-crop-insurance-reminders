@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New England Crop Insurance Stuff</title>
+    <title>USDA RMA and FSA Programs App</title>
 
 
 
@@ -16,7 +16,7 @@
 <header>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" href="#">Crop Insurance Alerts</a>
+    <a class="navbar-brand" href="#">USDA RMA and FSA Programs App</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

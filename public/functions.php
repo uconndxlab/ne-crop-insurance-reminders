@@ -43,7 +43,7 @@ function do_register() {
         exit;
     }
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (firstname, lastname, email, phone, password) VALUES ('$firstname', '$lastname', '$email', '$phone', '$password')";
+    $sql = "INSERT INTO users (firstname, lastname, email, phone, password, user_type ) VALUES ('$firstname', '$lastname', '$email', '$phone', '$password', 'user')";
    
     $db->exec($sql);
     $_SESSION['user_id'] = $db->lastInsertRowID();
@@ -51,6 +51,7 @@ function do_register() {
     $_SESSION['lastname'] = $lastname;
     $_SESSION['email'] = $email;
     $_SESSION['phone'] = $phone;
+    $_SESSION['user_type'] = 'user';
     $_SESSION['success'] = 'You are now registered and logged in as ' . $email;
     header('Location: /profile');
     exit;

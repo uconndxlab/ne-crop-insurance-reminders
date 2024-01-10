@@ -118,7 +118,7 @@
                         <!-- card with add deadline form -->
 
 
-                        <div class="card">
+                        <div class="card" style="max-width:400px;">
                             <h5 class="card-header">Add Deadline</h5>
                             <div class="card-body">
 

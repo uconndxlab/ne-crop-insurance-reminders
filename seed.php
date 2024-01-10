@@ -21,6 +21,7 @@ $db->exec('CREATE TABLE IF NOT EXISTS users (
     state_id INTEGER,
     phone TEXT,
     password TEXT NOT NULL,
+    user_type TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
 
