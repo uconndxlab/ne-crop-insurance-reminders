@@ -19,5 +19,16 @@ if (empty($deadlines)) {
     // if there are deadlines, loop through them and echo a message for each one
     foreach ($deadlines as $deadline) {
         echo "Deadline " .$deadline['deadline_name'] ."  for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . "\n";
+        // get all users subscribed to this deadline with the get_users_by_deadline function
+        $users = get_users_for_deadline($deadline);
+        //print_r($users);
+
+        // echo a message for each user
+        foreach ($users as $user) {
+            echo "Sending reminder to USER ID: " . $user['user_id'] . "\n";
+            // send an email to each user
+            //send_reminder_email($user, $deadline);
+        }
+
     }
 }

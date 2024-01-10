@@ -365,6 +365,19 @@ function get_deadlines_by_date($date){
     return $deadlines;
 }
 
+function get_users_for_deadline($deadline) {
+    global $db;
+    $query = 'SELECT * FROM user_crops WHERE crop_id = "' . $deadline['crop_id'] . '" AND state_id = "' . $deadline['state_id']. '"';
+    //echo $query;
+    $results = $db->query($query);
+    $users = [];
+    while ($row = $results->fetchArray()) {
+        $users[] = $row;
+    }
+    return $users;
+
+}
+
 
 
 function get_deadlines_by_user_id($user_id) {
