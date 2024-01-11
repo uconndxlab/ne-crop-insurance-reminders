@@ -440,6 +440,7 @@ function get_logged_in_user() {
 }
 
 function send_reminder_email($user,$deadline){
+    global $db;
     $to = $user['email'];
     $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
     $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . ".\n\nThanks,\n\nThe Crop Alerts App";
@@ -450,6 +451,26 @@ function send_reminder_email($user,$deadline){
     echo "Subject: " . $subject . "\n";
     echo "Message: " . $message . "\n";
     echo "Headers: " . $headers . "\n";
+
+    // update the reminders table to show that this reminder was sent
+
+    // $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
+    //     id INTEGER PRIMARY KEY,
+    //     deadline_id INTEGER NOT NULL,
+    //     reminder_sent_time DATETIME NOT NULL,
+    //     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    // )');
+
+     $sql = "INSERT INTO reminders_sent (deadline_id, reminder_sent_time) VALUES ('" . $deadline['id'] . "', '" . date('Y-m-d H:i:s') . "')";
+
+    if($db->exec($sql)) {
+        echo "Reminder sent successfully and logged in table. \n";
+    } else {
+        echo "Error sending reminder";
+    }
+
+    // send the email
+    // mail($to,$subject,$message,$headers);
 
 
 }
