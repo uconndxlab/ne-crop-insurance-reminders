@@ -1,6 +1,7 @@
 <?php
 require_once('functions.php');
 
+
 // this file will be run by a cron job every day, to check if there are any deadlines within the next 14 days
 
 // get all deadlines within the next 14 days

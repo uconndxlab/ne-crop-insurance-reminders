@@ -1,12 +1,18 @@
 <?php
+
+
 // the path to the sqlite database needs to be absolute, not relative
 $db = new SQLite3('../db.sqlite');
 
-function check_session() {
+// Uncomment the next line if you're not using a dependency loader (such as Composer), replacing <PATH TO> with the path to the sendgrid-php.php file
+require_once 'sendgrid/sendgrid-php.php';
 
-    if(!isset($_SESSION['user_id'])) {
-     // if we're on the login page, don't redirect
-        if($_SERVER['REQUEST_URI'] === '/login') {
+function check_session()
+{
+
+    if (!isset($_SESSION['user_id'])) {
+        // if we're on the login page, don't redirect
+        if ($_SERVER['REQUEST_URI'] === '/login') {
             return;
         }
         $_SESSION['error'] = 'You must be logged in to view that page';
@@ -25,7 +31,8 @@ function check_session() {
     }
 }
 
-function do_register() {
+function do_register()
+{
     global $db;
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
@@ -46,7 +53,7 @@ function do_register() {
     }
     $password = password_hash($password, PASSWORD_DEFAULT);
     $sql = "INSERT INTO users (firstname, lastname, email, phone, password, user_type ) VALUES ('$firstname', '$lastname', '$email', '$phone', '$password', 'user')";
-   
+
     $db->exec($sql);
     $_SESSION['user_id'] = $db->lastInsertRowID();
     $_SESSION['firstname'] = $firstname;
@@ -59,7 +66,8 @@ function do_register() {
     exit;
 }
 
-function user_exists($email) {
+function user_exists($email)
+{
     global $db;
     $results = $db->query("SELECT * FROM users WHERE email = '$email'");
     $row = $results->fetchArray();
@@ -69,10 +77,11 @@ function user_exists($email) {
     return false;
 }
 
-function do_login() {
+function do_login()
+{
     global $db;
     $email = $_POST['email'];
-    $password = $_POST['password'];  
+    $password = $_POST['password'];
     $results = $db->query("SELECT * FROM users WHERE email = '$email'");
     $row = $results->fetchArray();
     if (password_verify($password, $row['password'])) {
@@ -95,29 +104,32 @@ function do_login() {
     }
 }
 
-function do_logout() {
+function do_logout()
+{
     session_destroy();
     header('Location: /');
     exit;
 }
 
-function do_layout($file) {
+function do_layout($file)
+{
     require_once 'layouts/header.php';
     require_once  $file . '.php';
     require_once 'layouts/footer.php';
 }
 
-function save_profile($user_id=0) {
+function save_profile($user_id = 0)
+{
     global $db;
-   
-    if($user_id) {
+
+    if ($user_id) {
         $sql = "UPDATE users SET allow_sms = '" . $_POST['text_updates'] . "',
          firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
     } else {
         $sql = "INSERT INTO users (firstname, lastname, email, phone) VALUES ('" . $_POST['firstname'] . "', '" . $_POST['lastname'] . "', '" . $_POST['email'] . "', '" . $_POST['phone'] . "')";
     }
 
-    if($db->exec($sql)) {
+    if ($db->exec($sql)) {
         $_SESSION['success'] = 'Profile saved successfully';
         header('Location: /profile');
         exit;
@@ -128,7 +140,8 @@ function save_profile($user_id=0) {
     }
 }
 
-function save_crop($crop_id = 0) {
+function save_crop($crop_id = 0)
+{
     global $db;
     if ($crop_id) {
         $sql = "UPDATE crops SET crop = '" . $_POST['crop'] . "' WHERE id = $crop_id";
@@ -136,7 +149,7 @@ function save_crop($crop_id = 0) {
         $sql = "INSERT INTO crops (crop) VALUES ('" . $_POST['crop'] . "')";
     }
 
-    if($db->exec($sql)) {
+    if ($db->exec($sql)) {
         $_SESSION['success'] = 'Crop saved successfully';
         header('Location: /');
         exit;
@@ -147,15 +160,16 @@ function save_crop($crop_id = 0) {
     }
 }
 
-function save_state($state_id=0) {
+function save_state($state_id = 0)
+{
     global $db;
-    if($state_id) {
+    if ($state_id) {
         $sql = "UPDATE states SET state = '" . $_POST['state'] . "' WHERE id = $state_id";
     } else {
         $sql = "INSERT INTO states (state) VALUES ('" . $_POST['state'] . "')";
     }
 
-    if($db->exec($sql)) {
+    if ($db->exec($sql)) {
         $_SESSION['success'] = 'State saved successfully';
         header('Location: /');
         exit;
@@ -166,14 +180,15 @@ function save_state($state_id=0) {
     }
 }
 
-function save_user_crop($user_id=0, $state_id=0, $crop_id=0) {
+function save_user_crop($user_id = 0, $state_id = 0, $crop_id = 0)
+{
 
     global $db;
-    if($user_id && $state_id && $crop_id) {
+    if ($user_id && $state_id && $crop_id) {
         $sql = "INSERT INTO user_crops (user_id, state_id, crop_id) VALUES ($user_id, $state_id, $crop_id)";
     }
 
-    if($db->exec($sql)) {
+    if ($db->exec($sql)) {
         $_SESSION['success'] = 'The product ' . $_POST['crop'] . ' was saved successfully. You will now receive alerts for this crop.';
         header('Location: /profile');
         exit;
@@ -182,10 +197,10 @@ function save_user_crop($user_id=0, $state_id=0, $crop_id=0) {
         header('Location: /profile');
         exit;
     }
-    
 }
 
-function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=0, $deadline="") {
+function save_deadline($deadline_id = 0, $deadline_name = "", $state_id = 0, $crop_id = 0, $deadline = "")
+{
     global $db;
 
     // die all the vars
@@ -194,19 +209,17 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
     } else {
         $sql = "INSERT INTO crops_states_deadlines (deadline_name, state_id, crop_id, deadline) 
         VALUES ('" . $deadline_name . "', '" . $state_id . "', '" . $crop_id . "', '" . $deadline . "')";
-    
     }
 
-    if($db->exec($sql)) {
+    if ($db->exec($sql)) {
         $_SESSION['success'] = 'Deadline saved successfully';
         header('Location: /');
         exit;
     } else {
-        $_SESSION['error'] = 'Error saving deadline. Error: ' . $db->lastErrorMsg(). ' SQL: ' . $sql;
+        $_SESSION['error'] = 'Error saving deadline. Error: ' . $db->lastErrorMsg() . ' SQL: ' . $sql;
         header('Location: /');
         exit;
     }
-
 }
 
 // deadlines_reminders (
@@ -216,16 +229,17 @@ function save_deadline($deadline_id=0, $deadline_name="", $state_id=0, $crop_id=
 //     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 // )
 
-function save_deadline_reminder($deadline_id, $reminder_send_time) {
+function save_deadline_reminder($deadline_id, $reminder_send_time)
+{
     global $db;
-   
-        $sql = "INSERT INTO deadlines_reminders (deadline_id, reminder_send_time) VALUES ('" . $deadline_id . "', '" . $reminder_send_time . "')";
-        $db->exec($sql);
-    
-}       
-        
 
-function delete_crop($id) {
+    $sql = "INSERT INTO deadlines_reminders (deadline_id, reminder_send_time) VALUES ('" . $deadline_id . "', '" . $reminder_send_time . "')";
+    $db->exec($sql);
+}
+
+
+function delete_crop($id)
+{
     global $db;
     $crop_id = $id;
     $sql = "DELETE FROM crops WHERE id = $crop_id";
@@ -235,7 +249,8 @@ function delete_crop($id) {
     exit;
 }
 
-function delete_state($id) {
+function delete_state($id)
+{
     global $db;
     $state_id = $id;
     $sql = "DELETE FROM states WHERE id = $state_id";
@@ -245,7 +260,8 @@ function delete_state($id) {
     exit;
 }
 
-function delete_user_crop($id) {
+function delete_user_crop($id)
+{
     global $db;
     $user_crop_id = $id;
     $sql = "DELETE FROM user_crops WHERE id = $user_crop_id";
@@ -255,7 +271,8 @@ function delete_user_crop($id) {
     exit;
 }
 
-function delete_deadline($id) {
+function delete_deadline($id)
+{
     global $db;
     $deadline_id = $id;
     $sql = "DELETE FROM crops_states_deadlines WHERE id = $deadline_id";
@@ -265,7 +282,8 @@ function delete_deadline($id) {
     exit;
 }
 
-function get_all_users() {
+function get_all_users()
+{
     global $db;
     $results = $db->query('SELECT * FROM users');
     $users = [];
@@ -275,7 +293,8 @@ function get_all_users() {
     return $users;
 }
 
-function get_all_crops() {
+function get_all_crops()
+{
     global $db;
     $results = $db->query('SELECT * FROM crops');
     $crops = [];
@@ -285,7 +304,8 @@ function get_all_crops() {
     return $crops;
 }
 
-function get_all_states() {
+function get_all_states()
+{
     global $db;
     $results = $db->query('SELECT * FROM states');
     $states = [];
@@ -295,7 +315,8 @@ function get_all_states() {
     return $states;
 }
 
-function get_crops_by_user_id($user_id) {
+function get_crops_by_user_id($user_id)
+{
     global $db;
     $sql = 'SELECT * FROM user_crops WHERE user_id = ' . $user_id;
     $results = $db->query($sql);
@@ -306,7 +327,8 @@ function get_crops_by_user_id($user_id) {
     return $crops;
 }
 
-function get_reminders_by_user_id($user_id) {
+function get_reminders_by_user_id($user_id)
+{
     global $db;
     // for each deadline by this user, get the reminders
     $deadlines = get_deadlines_by_user_id($user_id);
@@ -325,28 +347,32 @@ function get_reminders_by_user_id($user_id) {
     return $reminders;
 }
 
-function get_state_name($id) {
+function get_state_name($id)
+{
     global $db;
     $results = $db->query('SELECT * FROM states WHERE id = ' . $id);
     $row = $results->fetchArray();
     return $row['state'];
 }
 
-function get_crop_name($id) {
+function get_crop_name($id)
+{
     global $db;
     $results = $db->query('SELECT * FROM crops WHERE id = ' . $id);
     $row = $results->fetchArray();
     return $row['crop'];
 }
 
-function get_deadline($id) {
+function get_deadline($id)
+{
     global $db;
     $results = $db->query('SELECT * FROM crops_states_deadlines WHERE id = ' . $id);
     $row = $results->fetchArray();
     return $row;
 }
 
-function get_all_deadlines() {
+function get_all_deadlines()
+{
     global $db;
     $results = $db->query('SELECT * FROM crops_states_deadlines');
     $deadlines = [];
@@ -358,10 +384,11 @@ function get_all_deadlines() {
     return $deadlines;
 }
 
-function get_deadlines_by_date($date){
+function get_deadlines_by_date($date)
+{
     global $db;
     $query = 'SELECT * FROM crops_states_deadlines WHERE deadline = "' . $date . '"';
-    $results = $db->query($query);  
+    $results = $db->query($query);
     $deadlines = [];
     while ($row = $results->fetchArray()) {
         $row['state'] = get_state_name($row['state_id']);
@@ -371,16 +398,18 @@ function get_deadlines_by_date($date){
     return $deadlines;
 }
 
-function get_user($id) {
+function get_user($id)
+{
     global $db;
     $results = $db->query('SELECT * FROM users WHERE id = ' . $id);
     $row = $results->fetchArray();
     return $row;
 }
 
-function get_users_for_deadline($deadline) {
+function get_users_for_deadline($deadline)
+{
     global $db;
-    $query = 'SELECT * FROM user_crops WHERE crop_id = "' . $deadline['crop_id'] . '" AND state_id = "' . $deadline['state_id']. '"';
+    $query = 'SELECT * FROM user_crops WHERE crop_id = "' . $deadline['crop_id'] . '" AND state_id = "' . $deadline['state_id'] . '"';
     //echo $query;
     $results = $db->query($query);
     $users = [];
@@ -388,12 +417,12 @@ function get_users_for_deadline($deadline) {
         $users[] = $row;
     }
     return $users;
-
 }
 
 
 
-function get_deadlines_by_user_id($user_id) {
+function get_deadlines_by_user_id($user_id)
+{
     global $db;
     $sql = 'SELECT * FROM user_crops WHERE user_id = ' . $user_id;
     $results = $db->query($sql);
@@ -418,28 +447,30 @@ function get_deadlines_by_user_id($user_id) {
     return $deadlines;
 }
 
-function get_all_reminders() {
+function get_all_reminders()
+{
     global $db;
     $sql = 'SELECT * FROM deadlines_reminders';
     // left join on deadlines table and crop and state so we can have the name of the deadline, crop, and state
     $sql = 'SELECT deadlines_reminders.id, deadlines_reminders.deadline_id, deadlines_reminders.reminder_send_time, crops_states_deadlines.deadline_name, crops_states_deadlines.deadline, crops_states_deadlines.state_id, crops_states_deadlines.crop_id, states.state, crops.crop FROM deadlines_reminders LEFT JOIN crops_states_deadlines ON deadlines_reminders.deadline_id = crops_states_deadlines.id LEFT JOIN states ON crops_states_deadlines.state_id = states.id LEFT JOIN crops ON crops_states_deadlines.crop_id = crops.id';
     $results = $db->query($sql);
     $reminders = [];
-    
+
     while ($row = $results->fetchArray()) {
         echo "<pre>";
         // print_r($row);
         echo "</pre>";
         $row['deadline_id'] = get_deadline($row['deadline_id']);
-        
+
         $row['days_remaining'] = date_diff(date_create($row['deadline']), date_create(date('Y-m-d')))->format('%a');
-        
+
         $reminders[] = $row;
     }
     return $reminders;
 }
 
-function get_logged_in_user() {
+function get_logged_in_user()
+{
     global $db;
     $user_id = $_SESSION['user_id'];
     $results = $db->query('SELECT * FROM users WHERE id = ' . $user_id);
@@ -447,42 +478,77 @@ function get_logged_in_user() {
     return $row;
 }
 
-function send_reminder_email($user,$deadline){
+
+/** This section contains all the notification stuff...email reminders, etc */
+
+function send_reminder_email($user, $deadline)
+{
     global $db;
+    include '../sg_config.php';
     $to = $user['email'];
     $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
-    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . ".\n\nThanks,\n\nThe Crop Alerts App";
+    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " 
+    . $deadline['deadline_name'] 
+    . " date for " . $deadline['crop'] 
+    . " in " . $deadline['state'] 
+    . " is " . $deadline['deadline']
+    . "."
+    . "\n\nBe sure to contact your crop insurance agent at least a month in advance."
+    . ".\n\nThanks,\n\nUConn Extension";
+    
     $headers = "From: dx@uconn.edu";
+    $email = new \SendGrid\Mail\Mail();
+
+    $email->setFrom("dxlab@uconn.edu");
+    $email->setSubject($subject);
+    $email->addTo($to);
+    $email->addContent("text/plain", $message);
+    $apiKey = trim($sg_api_key);
+
+  
+
+
+
+   $sendgrid = new \SendGrid($apiKey);
+
+
+    try {
+        $response = $sendgrid->send($email);
+
+        $success = true;
+    } catch (Exception $e) {
+        echo 'Caught exception: ' . $e->getMessage() . "\n";
+        $success = false;
+    }
+
 
     // echo out the email for testing
     echo "Sending email to: " . $to . "\n";
-    echo "Subject: " . $subject . "\n";
-    echo "Message: " . $message . "\n";
-    echo "Headers: " . $headers . "\n";
 
-    // update the reminders table to show that this reminder was sent
+    if ($success) {
+        echo $response->statusCode() . "\n";
+        echo "Email sent successfully";
+        $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
+                id INTEGER PRIMARY KEY,
+                deadline_id INTEGER NOT NULL,
+                reminder_sent_time DATETIME NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )');
 
-    $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
-        id INTEGER PRIMARY KEY,
-        deadline_id INTEGER NOT NULL,
-        reminder_sent_time DATETIME NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )');
+        $sql = "INSERT INTO reminders_sent (deadline_id, reminder_sent_time) VALUES ('" . $deadline['id'] . "', '" . date('Y-m-d H:i:s') . "')";
 
-     $sql = "INSERT INTO reminders_sent (deadline_id, reminder_sent_time) VALUES ('" . $deadline['id'] . "', '" . date('Y-m-d H:i:s') . "')";
-
-    if($db->exec($sql)) {
-        echo "Reminder sent successfully and logged in table. \n";
+        if ($db->exec($sql)) {
+            echo "Reminder sent successfully and logged in table. \n";
+        } else {
+            echo "Error logging reminder";
+        }
     } else {
-        echo "Error sending reminder";
+        echo "Error sending email";
     }
-
-    // send the email
-    // mail($to,$subject,$message,$headers);
-
 }
 
-function send_reminder_sms($user, $deadline) {
+function send_reminder_sms($user, $deadline)
+{
     // get the user's phone number
     $to = $user['phone'];
     // get the message
