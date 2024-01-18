@@ -405,6 +405,9 @@ function get_deadlines_by_user_id($user_id) {
     $deadlines = [];
     foreach ($crops as $crop) {
         $sql = 'SELECT * FROM crops_states_deadlines WHERE crop_id = ' . $crop['crop_id'] . ' AND state_id = ' . $crop['state_id'];
+        $sql .= ' AND strftime("%Y-%m-%d", deadline) >= date("now")';
+        $sql .= ' ORDER BY deadline ASC';
+
         $results = $db->query($sql);
         while ($row = $results->fetchArray()) {
             $row['state'] = get_state_name($row['state_id']);

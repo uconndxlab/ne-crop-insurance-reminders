@@ -117,6 +117,7 @@ $crops = get_all_crops();
 
 
             <h3 class="mt-5">My Deadlines</h3>
+            <h4> Showing only deadlines in the future. </h4>
 
             <!-- table of subscribed reminders -->
             <table class="table">
