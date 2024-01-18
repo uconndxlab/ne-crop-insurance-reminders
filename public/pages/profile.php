@@ -1,8 +1,8 @@
 <?php
 
 require_once 'functions.php';
-$states=get_all_states();
-$crops=get_all_crops();
+$states = get_all_states();
+$crops = get_all_crops();
 
 ?>
 <div class="page page-profile container">
@@ -112,7 +112,7 @@ $crops=get_all_crops();
                 }
                 ?>
             </table>
-            
+
 
 
 
@@ -156,7 +156,7 @@ $crops=get_all_crops();
                     <th>Remove</th>
                 </tr>
                 <?php
-               // $reminders = get_reminders_by_user_id($_SESSION['user_id']);
+                // $reminders = get_reminders_by_user_id($_SESSION['user_id']);
                 // foreach ($reminders as $reminder) {
                 //     echo '<tr>';
                 //     echo '<td>' . $reminder['state'] . '</td>';
@@ -169,23 +169,24 @@ $crops=get_all_crops();
                 ?>
 
             </table> -->
-            
-            <h3 class="mt-5">Policy Documents</h3>
-            <ul>
-                <?php
-                // Specify the path to your PDF documents
-                $pdfDirectory = 'policy_documents/';
+            <div class="policy-documents">
+                <h3 class="mt-5">Policy Documents</h3>
+                <ul>
+                    <?php
+                    // Specify the path to your PDF documents
+                    $pdfDirectory = 'policy_documents/';
 
-                // Get all PDF files from the directory
-                $pdfFiles = glob($pdfDirectory . '*.pdf');
+                    // Get all PDF files from the directory
+                    $pdfFiles = glob($pdfDirectory . '*.pdf');
 
-                // Generate links for each PDF file without the ".pdf" extension
-                foreach ($pdfFiles as $pdfFile) {
-                    $pdfFileName = basename($pdfFile, '.pdf');
-                    echo '<li><a href="' . $pdfDirectory . $pdfFile . '" target="_blank">' . $pdfFileName . '</a></li>';
-                }
-                ?>
-            </ul>
+                    // Generate links for each PDF file without the ".pdf" extension
+                    foreach ($pdfFiles as $pdfFile) {
+                        $pdfFileName = basename($pdfFile, '.pdf');
+                        echo '<li><a href="' . $pdfDirectory . $pdfFile . '" target="_blank">' . $pdfFileName . '</a></li>';
+                    }
+                    ?>
+                </ul>
+            </div>
 
         </div>
     </div>

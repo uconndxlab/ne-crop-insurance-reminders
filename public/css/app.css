@@ -39,3 +39,7 @@ footer {
 label {
     display: block;
 }
+
+.policy-documents {
+    display:none;
+}
