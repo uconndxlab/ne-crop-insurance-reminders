@@ -20,6 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <?php if (isset($_SESSION['user_id'])) : ?>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <?php if ($_SESSION['user_type'] == 'admin') : ?>
         <li class="nav-item">
           <a class="nav-link
           <?php if ($_SERVER['REQUEST_URI'] == '/') : ?>
@@ -27,6 +28,7 @@
           <?php endif; ?>
           " aria-current="page" href="/">Management Dashboard</a>
         </li>
+        <?php endif; ?>
         <li class="nav-item">
           <a class="
           

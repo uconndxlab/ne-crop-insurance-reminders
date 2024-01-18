@@ -22,6 +22,7 @@ $db->exec('CREATE TABLE IF NOT EXISTS users (
     phone TEXT,
     password TEXT NOT NULL,
     user_type TEXT NOT NULL,
+    allow_sms INTEGER NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
 
@@ -66,6 +67,7 @@ $db->exec('CREATE TABLE IF NOT EXISTS deadlines_reminders (
     reminder_send_time DATETIME NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
+
 
 /** insert states (new england) */
 $db->exec('INSERT INTO states (state) VALUES ("Connecticut")');
