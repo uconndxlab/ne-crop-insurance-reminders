@@ -7,7 +7,7 @@ $crops=get_all_crops();
 ?>
 <div class="page page-profile container">
     <header class="page-header">
-        <h2>My Profile</h2>
+        <h2>My User Profile</h2>
     </header>
     <div class="row mt-3">
         <div class="col-md-6">
@@ -29,6 +29,15 @@ $crops=get_all_crops();
                 <div class="mb-3">
                     <label for="phone">Phone Number</label>
                     <input type="text" name="phone" id="phone" value="<?php echo $_SESSION['phone']; ?>">
+                </div>
+
+                <!-- allow text updates -->
+                <div class="mb-3">
+                    <label for="text_updates">Text Updates</label>
+                    <select name="text_updates" id="text_updates">
+                        <option value="1" <?php if ($_SESSION['text_updates'] == 1) : ?>selected<?php endif; ?>>Yes</option>
+                        <option value="0" <?php if ($_SESSION['text_updates'] == 0) : ?>selected<?php endif; ?>>No</option>
+                    </select>
                 </div>
 
 

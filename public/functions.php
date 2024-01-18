@@ -20,6 +20,8 @@ function check_session() {
         $_SESSION['lastname'] = $user['lastname'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['phone'] = $user['phone'];
+        $_SESSION['user_type'] = $user['user_type'];
+        $_SESSION['text_updates'] = $user['allow_sms'];
     }
 }
 
@@ -79,6 +81,8 @@ function do_login() {
         $_SESSION['lastname'] = $row['lastname'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['phone'] = $row['phone'];
+        $_SESSION['user_type'] = $row['user_type'];
+        $_SESSION['text_updates'] = $row['allow_sms'];
 
 
         $_SESSION['success'] = 'You are now logged in as ' . $row['email'];
@@ -107,7 +111,8 @@ function save_profile($user_id=0) {
     global $db;
    
     if($user_id) {
-        $sql = "UPDATE users SET firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
+        $sql = "UPDATE users SET allow_sms = '" . $_POST['text_updates'] . "',
+         firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
     } else {
         $sql = "INSERT INTO users (firstname, lastname, email, phone) VALUES ('" . $_POST['firstname'] . "', '" . $_POST['lastname'] . "', '" . $_POST['email'] . "', '" . $_POST['phone'] . "')";
     }
@@ -454,12 +459,12 @@ function send_reminder_email($user,$deadline){
 
     // update the reminders table to show that this reminder was sent
 
-    // $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
-    //     id INTEGER PRIMARY KEY,
-    //     deadline_id INTEGER NOT NULL,
-    //     reminder_sent_time DATETIME NOT NULL,
-    //     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    // )');
+    $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
+        id INTEGER PRIMARY KEY,
+        deadline_id INTEGER NOT NULL,
+        reminder_sent_time DATETIME NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )');
 
      $sql = "INSERT INTO reminders_sent (deadline_id, reminder_sent_time) VALUES ('" . $deadline['id'] . "', '" . date('Y-m-d H:i:s') . "')";
 
@@ -472,5 +477,14 @@ function send_reminder_email($user,$deadline){
     // send the email
     // mail($to,$subject,$message,$headers);
 
+}
 
+function send_reminder_sms($user, $deadline) {
+    // get the user's phone number
+    $to = $user['phone'];
+    // get the message
+    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . ".\n\nThanks,\n\nThe Crop Alerts App";
+
+    // echo out the sms for testing
+    echo "Sending sms to: " . $to . "\n";
 }

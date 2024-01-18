@@ -18,6 +18,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <?php if (isset($_SESSION['user_id'])) : ?>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link
@@ -35,6 +36,7 @@
           nav-link" href="/profile">My Grower Profile</a>
         </li>
       </ul>
+      <?php endif; ?>
     </div>
     <!-- login/logout -->
     <div class="d-flex align-items-center">
