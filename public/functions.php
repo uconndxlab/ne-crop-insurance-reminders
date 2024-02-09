@@ -306,7 +306,7 @@ function get_all_users()
 function get_all_crops()
 {
     global $db;
-    $results = $db->query('SELECT * FROM crops');
+    $results = $db->query('SELECT * FROM crops ORDER BY crop ASC');
     $crops = [];
     while ($row = $results->fetchArray()) {
         $crops[] = $row;
@@ -384,7 +384,8 @@ function get_deadline($id)
 function get_all_deadlines()
 {
     global $db;
-    $results = $db->query('SELECT * FROM crops_states_deadlines');
+    $results = $db->query('SELECT * FROM crops_states_deadlines WHERE strftime("%Y-%m-%d", deadline) >= date("now")
+     ORDER BY deadline ASC');
     $deadlines = [];
     while ($row = $results->fetchArray()) {
         $row['state'] = get_state_name($row['state_id']);
