@@ -49,15 +49,18 @@ $crops = get_all_crops();
 
         <div class="col-md-6">
             <h3>Change Password</h3>
-            <form action="/post/password" method="post">
+            <form action="change_password.php" method="post">
                 <div class="mb-3">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" name="current_password" id="current_password" required>
                 </div>
-                <!-- confirm password -->
                 <div class="mb-3">
-                    <label for="password_confirm">Confirm Password</label>
-                    <input type="password" name="password_confirm" id="password_confirm">
+                    <label for="password">New Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password_confirm">Confirm New Password</label>
+                    <input type="password" name="password_confirm" id="password_confirm" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </form>

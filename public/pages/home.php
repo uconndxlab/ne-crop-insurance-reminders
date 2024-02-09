@@ -233,6 +233,7 @@
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email Address</th>
+                                    <th>User's Crops</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -240,12 +241,22 @@
                                 <?php
                                 $users = get_all_users();
                                 foreach ($users as $user) {
-                                    echo '<tr>';
-                                    echo '<td>' . $user['firstname'] . '</td>';
-                                    echo '<td>' . $user['lastname'] . '</td>';
-                                    echo '<td>' . $user['email'] . '</td>';
-                                    echo '<td><a href="/users/delete/' . $user['id'] . '" class="btn btn-danger">Delete</a></td>';
-                                    echo '</tr>';
+                                    $crops = isset($user['crops']) ? explode("\n", $user['crops']) : [];
+                                    foreach ($crops as $index => $crop) {
+                                        echo '<tr>';
+                                        if ($index == 0) {
+                                            // Only display the user details in the first row
+                                            echo '<td rowspan="' . count($crops) . '">' . htmlspecialchars($user['firstname']) . '</td>';
+                                            echo '<td rowspan="' . count($crops) . '">' . htmlspecialchars($user['lastname']) . '</td>';
+                                            echo '<td rowspan="' . count($crops) . '">' . htmlspecialchars($user['email']) . '</td>';
+                                        }
+                                        echo '<td>' . htmlspecialchars($crop) . '</td>';
+                                        if ($index == 0) {
+                                            // Only display the delete button in the first row
+                                            echo '<td rowspan="' . count($crops) . '"><a href="/users/delete/' . $user['id'] . '" class="btn btn-danger">Delete</a></td>';
+                                        }
+                                        echo '</tr>';
+                                    }
                                 }
                                 ?>
                             </tbody>
