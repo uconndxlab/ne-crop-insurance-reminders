@@ -1,5 +1,10 @@
 <?php
 
+/** if abs path, die */
+if (realpath(__FILE__) !== __FILE__) {
+    die('You are lost.');
+}
+
 $db = new SQLite3('db.sqlite');
 
 /** remove all tables to start over */
