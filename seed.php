@@ -8,13 +8,13 @@ if (realpath(__FILE__) !== __FILE__) {
 $db = new SQLite3('db.sqlite');
 
 /** remove all tables to start over */
-$db->exec('DROP TABLE IF EXISTS users');
-$db->exec('DROP TABLE IF EXISTS user_crops');
-$db->exec('DROP TABLE IF EXISTS states');
-$db->exec('DROP TABLE IF EXISTS crops');
-$db->exec('DROP TABLE IF EXISTS crops_states');
-$db->exec('DROP TABLE IF EXISTS crops_states_deadlines');
-$db->exec('DROP TABLE IF EXISTS deadlines_reminders');
+// $db->exec('DROP TABLE IF EXISTS users');
+// $db->exec('DROP TABLE IF EXISTS user_crops');
+// $db->exec('DROP TABLE IF EXISTS states');
+// $db->exec('DROP TABLE IF EXISTS crops');
+// $db->exec('DROP TABLE IF EXISTS crops_states');
+// $db->exec('DROP TABLE IF EXISTS crops_states_deadlines');
+// $db->exec('DROP TABLE IF EXISTS deadlines_reminders');
 
 
 /** create a users table: id, email, firstname, lastname, state, phone # */
@@ -30,6 +30,9 @@ $db->exec('CREATE TABLE IF NOT EXISTS users (
     allow_sms INTEGER NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )');
+
+/** add the mobile_provider column to the users table if it doesn't exist */
+$db->exec('ALTER TABLE users ADD COLUMN mobile_provider TEXT');
 
 
 /** create user_crops table */
@@ -119,6 +122,8 @@ $crops = [
 foreach ($crops as $crop) {
     $db->exec('INSERT INTO crops (crop) VALUES ("' . $crop . '")');
 }
+
+
 
 
 /** insert crops_states_deadlines */

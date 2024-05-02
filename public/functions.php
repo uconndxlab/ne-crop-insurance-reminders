@@ -28,6 +28,7 @@ function check_session()
         $_SESSION['phone'] = $user['phone'];
         $_SESSION['user_type'] = $user['user_type'];
         $_SESSION['text_updates'] = $user['allow_sms'];
+        $_SESSION['mobile_provider'] = $user['mobile_provider'];
     }
 }
 
@@ -124,9 +125,9 @@ function save_profile($user_id = 0)
 
     if ($user_id) {
         $sql = "UPDATE users SET allow_sms = '" . $_POST['text_updates'] . "',
-         firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "' WHERE id = $user_id";
+         firstname = '" . $_POST['firstname'] . "', lastname = '" . $_POST['lastname'] . "', email = '" . $_POST['email'] . "', phone = '" . $_POST['phone'] . "', mobile_provider = '" . $_POST['mobile_provider'] . "' WHERE id = $user_id";
     } else {
-        $sql = "INSERT INTO users (firstname, lastname, email, phone) VALUES ('" . $_POST['firstname'] . "', '" . $_POST['lastname'] . "', '" . $_POST['email'] . "', '" . $_POST['phone'] . "')";
+        $sql = "INSERT INTO users (firstname, lastname, email, phone, mobile_provider) VALUES ('" . $_POST['firstname'] . "', '" . $_POST['lastname'] . "', '" . $_POST['email'] . "', '" . $_POST['phone'] . "', '" . $_POST['mobile_provider'] . "')";
     }
 
     if ($db->exec($sql)) {

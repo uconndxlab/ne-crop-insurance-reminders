@@ -15,26 +15,41 @@ $crops = get_all_crops();
             <form action="/post/profile/save" method="post">
                 <div class="mb-3">
                     <label for="firstname">First Name</label>
-                    <input type="text" name="firstname" id="firstname" value="<?php echo $_SESSION['firstname']; ?>">
+                    <input class="form-control" type="text" name="firstname" id="firstname" value="<?php echo $_SESSION['firstname']; ?>">
                 </div>
                 <div class="mb-3">
                     <label for="lastname">Last Name</label>
-                    <input type="text" name="lastname" id="lastname" value="<?php echo $_SESSION['lastname']; ?>">
+                    <input class="form-control" type="text" name="lastname" id="lastname" value="<?php echo $_SESSION['lastname']; ?>">
                 </div>
                 <div class="mb-3">
                     <label for="email">Email Address</label>
-                    <input type="email" name="email" id="email" value="<?php echo $_SESSION['email']; ?>">
+                    <input class="form-control" type="email" name="email" id="email" value="<?php echo $_SESSION['email']; ?>">
                 </div>
 
                 <div class="mb-3">
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" id="phone" value="<?php echo $_SESSION['phone']; ?>">
+                    <input class="form-control" type="text" name="phone" id="phone" value="<?php echo $_SESSION['phone']; ?>">
+                </div>
+
+                <div class="mb-3">
+                    <!-- phone service provider (SMS email address) -->
+                    <label for="mobile_provider">Phone Provider</label>
+                    <select class="form-select" id="mobile_provider" name="mobile_provider">
+                        <option value="mms.att.net"<?php if ($_SESSION['mobile_provider'] == 'mms.att.net') : ?> selected<?php endif; ?>>AT&T</option>
+                        <option value="tmomail.net"<?php if ($_SESSION['mobile_provider'] == 'tmomail.net') : ?> selected<?php endif; ?>>T-Mobile</option>
+                        <option value="vtext.com"<?php if ($_SESSION['mobile_provider'] == 'vtext.com') : ?> selected<?php endif; ?>>Verizon</option>
+                        <option value="messaging.sprintpcs.com"<?php if ($_SESSION['mobile_provider'] == 'messaging.sprintpcs.com') : ?> selected<?php endif; ?>>Sprint</option>
+                        <option value="sms.mycricket.com"<?php if ($_SESSION['mobile_provider'] == 'sms.mycricket.com') : ?> selected<?php endif; ?>>Cricket</option>
+                        <option value="vmobl.com"<?php if ($_SESSION['mobile_provider'] == 'vmobl.com') : ?> selected<?php endif; ?>>Virgin Mobile</option>
+                        <option value="msg.fi.google.com"<?php if ($_SESSION['mobile_provider'] == 'msg.fi.google.com') : ?> selected<?php endif; ?>>Google Fi</option>
+                    </select>
+                    </select>
                 </div>
 
                 <!-- allow text updates -->
                 <div class="mb-3">
                     <label for="text_updates">Text Updates</label>
-                    <select name="text_updates" id="text_updates">
+                    <select class="form-select" name="text_updates" id="text_updates">
                         <option value="1" <?php if ($_SESSION['text_updates'] == 1) : ?>selected<?php endif; ?>>Yes</option>
                         <option value="0" <?php if ($_SESSION['text_updates'] == 0) : ?>selected<?php endif; ?>>No</option>
                     </select>
@@ -52,15 +67,15 @@ $crops = get_all_crops();
             <form action="change_password.php" method="post">
                 <div class="mb-3">
                     <label for="current_password">Current Password</label>
-                    <input type="password" name="current_password" id="current_password" required>
+                    <input class="form-control" class="form-control" type="password" name="current_password" id="current_password" required>
                 </div>
                 <div class="mb-3">
                     <label for="password">New Password</label>
-                    <input type="password" name="password" id="password" required>
+                    <input class="form-control" type="password" name="password" id="password" required>
                 </div>
                 <div class="mb-3">
                     <label for="password_confirm">Confirm New Password</label>
-                    <input type="password" name="password_confirm" id="password_confirm" required>
+                    <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </form>
@@ -75,7 +90,7 @@ $crops = get_all_crops();
                     <form action="/post/user_crop/save" method="post">
                         <div class="mb-3">
                             <label for="state">State</label>
-                            <select name="state_id" id="state">
+                            <select name="state_id" id="state" class="form-select">
                                 <?php foreach ($states as $state) : ?>
                                     <option value="<?php echo $state['id']; ?>"><?php echo $state['state']; ?></option>
                                 <?php endforeach; ?>
@@ -83,7 +98,7 @@ $crops = get_all_crops();
                         </div>
                         <div class="mb-3">
                             <label for="crop">Product</label>
-                            <select name="crop_id" id="crop">
+                            <select name="crop_id" id="crop" class="form-select">
                                 <?php foreach ($crops as $crop) : ?>
                                     <option value="<?php echo $crop['id']; ?>"><?php echo $crop['crop']; ?></option>
                                 <?php endforeach; ?>
