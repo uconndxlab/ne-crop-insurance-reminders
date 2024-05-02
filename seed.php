@@ -78,12 +78,12 @@ $db->exec('CREATE TABLE IF NOT EXISTS deadlines_reminders (
 
 
 /** insert states (new england) */
-$db->exec('INSERT INTO states (state) VALUES ("Connecticut")');
-$db->exec('INSERT INTO states (state) VALUES ("Maine")');
-$db->exec('INSERT INTO states (state) VALUES ("Massachusetts")');
-$db->exec('INSERT INTO states (state) VALUES ("New Hampshire")');
-$db->exec('INSERT INTO states (state) VALUES ("Rhode Island")');
-$db->exec('INSERT INTO states (state) VALUES ("Vermont")');
+// $db->exec('INSERT INTO states (state) VALUES ("Connecticut")');
+// $db->exec('INSERT INTO states (state) VALUES ("Maine")');
+// $db->exec('INSERT INTO states (state) VALUES ("Massachusetts")');
+// $db->exec('INSERT INTO states (state) VALUES ("New Hampshire")');
+// $db->exec('INSERT INTO states (state) VALUES ("Rhode Island")');
+// $db->exec('INSERT INTO states (state) VALUES ("Vermont")');
 
 /** insert crops */
 
@@ -119,9 +119,9 @@ $crops = [
     "Wheat"
 ];
 
-foreach ($crops as $crop) {
-    $db->exec('INSERT INTO crops (crop) VALUES ("' . $crop . '")');
-}
+// foreach ($crops as $crop) {
+//     $db->exec('INSERT INTO crops (crop) VALUES ("' . $crop . '")');
+// }
 
 
 
