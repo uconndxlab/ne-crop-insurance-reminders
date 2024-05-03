@@ -37,10 +37,6 @@ if (empty($deadlines)) {
                 echo "Email: " . $user['email'] . "\n";
                 // send an email to each user
                 send_reminder_email($user, $deadline);
-                if ($user['allow_sms'] == 1) {
-                    // send an sms to each user
-                    //send_reminder_sms($user, $deadline);
-                }
             }
         }
     }

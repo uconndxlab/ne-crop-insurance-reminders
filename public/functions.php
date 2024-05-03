@@ -498,6 +498,14 @@ function send_reminder_email($user, $deadline)
     global $db;
     include '../sg_config.php';
     $to = $user['email'];
+
+    // if the user has text updates enabled, send a text message
+    if ($user['allow_sms']) {
+        $cc = $user['phone'] . '@' . $user['mobile_provider'];
+    }
+
+
+
     $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
     $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " 
     . $deadline['deadline_name'] 
@@ -514,6 +522,7 @@ function send_reminder_email($user, $deadline)
     $email->setFrom("dxlab@uconn.edu");
     $email->setSubject($subject);
     $email->addTo($to);
+    $email->addCC($cc);
     $email->addContent("text/plain", $message);
     $apiKey = trim($sg_api_key);
 
@@ -537,6 +546,8 @@ function send_reminder_email($user, $deadline)
     // echo out the email for testing
     echo "Sending email to: " . $to . "\n";
 
+  
+
     if ($success) {
         echo $response->statusCode() . "\n";
         echo "Email sent successfully";
@@ -559,13 +570,4 @@ function send_reminder_email($user, $deadline)
     }
 }
 
-function send_reminder_sms($user, $deadline)
-{
-    // get the user's phone number
-    $to = $user['phone'];
-    // get the message
-    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'] . ".\n\nThanks,\n\nThe Crop Alerts App";
 
-    // echo out the sms for testing
-    echo "Sending sms to: " . $to . "\n";
-}
