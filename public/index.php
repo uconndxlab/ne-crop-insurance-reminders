@@ -7,7 +7,7 @@ require_once 'functions.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 
-switch($_SERVER['REQUEST_URI']) {
+switch ($_SERVER['REQUEST_URI']) {
     case '/':
         check_session();
         do_layout('pages/home');
@@ -33,13 +33,13 @@ switch($_SERVER['REQUEST_URI']) {
     case '/register':
         do_layout('pages/register');
         break;
-    // case post/crop/delete/{id}
+        // case post/crop/delete/{id}
     case '/post/crop/delete':
         check_session();
         $crop_id = $_POST['crop_id'];
         delete_crop($crop_id);
         break;
-    // case post/crop/save/
+        // case post/crop/save/
     case '/post/crop/save':
         check_session();
         $crop_id = $_POST['crop_id'];
@@ -79,7 +79,7 @@ switch($_SERVER['REQUEST_URI']) {
         $deadline_name = $_POST['deadline_name'];
         $deadline = $_POST['deadline'];
         //$deadline_name="", $state_id=0, $crop_id=0, $deadline=""
-        save_deadline(0,$deadline_name, $state_id, $crop_id, $deadline);  
+        save_deadline(0, $deadline_name, $state_id, $crop_id, $deadline);
         break;
     case '/post/deadline/delete':
         check_session();
@@ -98,11 +98,32 @@ switch($_SERVER['REQUEST_URI']) {
         $deadline_id = $_POST['deadline_id'];
         $deadline = get_deadline($deadline_id);
         $users = get_users_for_deadline($deadline);
+        $successful_deliveries = 0;
+        $total_users = count($users);
         // loop through the users and send them an email
         foreach ($users as $user) {
             $user = get_user($user['user_id']);
-            send_reminder_email($user, $deadline);
+            $reminder_sent = send_reminder_email($user, $deadline);
+            if ($reminder_sent) {
+                $successful_deliveries++;
+            }
         }
+        $msg_type = "success";
+        if ($successful_deliveries == 0) {
+            $msg_type = "error";
+        }
+
+        if($successful_deliveries != $total_users){
+            $msg_type = "error";
+            $msg = "Sent reminders to " . $successful_deliveries . " out of " . $total_users . " users";
+        } else {
+            $msg = "Sent reminders to all " . $total_users . " users";
+        }
+
+        $_SESSION[$msg_type] = $msg;
+
+        header('Location: /');
+        
         break;
     default:
         // set http response code to 404

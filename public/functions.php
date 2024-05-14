@@ -543,24 +543,23 @@ function send_reminder_email($user, $deadline)
 
         $success = true;
     } catch (Exception $e) {
-        echo 'Caught exception: ' . $e->getMessage() . "\n";
+        //echo 'Caught exception: ' . $e->getMessage() . "\n";
         $success = false;
     }
 
 
     // echo out the email for testing
-    echo "Sending email to: " . $to . "| \n";
+    //echo "Sending email to: " . $to . "| \n";
 
     // if the user has text updates enabled, send a text message
     if ($user['allow_sms']) {
-        send_reminder_sms($user, $deadline);
+        $success = send_reminder_sms($user, $deadline);
     }
 
 
     if ($success) {
-        echo "Status code: ";
+
         echo $response->statusCode() . "|\n";
-        echo "Email sent successfully";
         $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
                 id INTEGER PRIMARY KEY,
                 deadline_id INTEGER NOT NULL,
@@ -571,13 +570,15 @@ function send_reminder_email($user, $deadline)
         $sql = "INSERT INTO reminders_sent (deadline_id, reminder_sent_time) VALUES ('" . $deadline['id'] . "', '" . date('Y-m-d H:i:s') . "')";
 
         if ($db->exec($sql)) {
-            echo "Reminder sent successfully and logged in table. \n";
+           // echo "Reminder sent successfully and logged in table. \n";
         } else {
-            echo "Error logging reminder";
+            // echo "Error logging reminder";
         }
     } else {
         echo "Error sending email";
     }
+
+    return $success;
 }
 
 function send_reminder_sms($user, $deadline)
@@ -617,4 +618,6 @@ function send_reminder_sms($user, $deadline)
         echo 'Caught exception: ' . $e->getMessage() . "\n";
         $success = false;
     }
+
+    return $success;
 }
