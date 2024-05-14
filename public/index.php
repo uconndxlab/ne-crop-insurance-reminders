@@ -92,6 +92,18 @@ switch($_SERVER['REQUEST_URI']) {
         $user_id = $_POST['user_id'];
         delete_user($user_id);
         break;
+    case '/post/deadline/notify':
+        check_session();
+        // get all the users for the deadline
+        $deadline_id = $_POST['deadline_id'];
+        $deadline = get_deadline($deadline_id);
+        $users = get_users_for_deadline($deadline);
+        // loop through the users and send them an email
+        foreach ($users as $user) {
+            $user = get_user($user['user_id']);
+            send_reminder_email($user, $deadline);
+        }
+        break;
     default:
         // set http response code to 404
         http_response_code(404);

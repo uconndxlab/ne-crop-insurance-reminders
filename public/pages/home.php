@@ -94,7 +94,7 @@
 
                                     echo '<form action="/post/state/delete" method="post">';
                                     echo '<input type="hidden" name="state_id" value="' . $state['id'] . '">';
-                                    echo '<button type="submit" class="btn btn-danger">Delete</button>';
+                                    echo '<button type="submit" class="btn btn-danger btn-sm">Delete</button>';
                                     echo '</form>';
                                    
                                     echo '</td>';
@@ -172,6 +172,10 @@
                                 echo '<td>' . $deadline['deadline_name'] . '</td>';
                                 echo '<td>' . $deadline['deadline'] . '</td>';
                                 echo '<td>';
+                                echo '<form action="/post/deadline/notify" method="post">';
+                                echo '<input type="hidden" name="deadline_id" value="' . $deadline['id'] . '">';
+                                echo '<button type="submit" class="btn btn-primary">Notify</button>';
+                                echo '</form>';
                                 echo '<form action="/post/deadline/delete" method="post">';
                                 echo '<input type="hidden" name="deadline_id" value="' . $deadline['id'] . '">';
                                 echo '<button type="submit" class="btn btn-danger">Delete</button>';

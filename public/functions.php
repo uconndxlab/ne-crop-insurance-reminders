@@ -511,38 +511,31 @@ function send_reminder_email($user, $deadline)
     include '../sg_config.php';
     $to = $user['email'];
 
-    // if the user has text updates enabled, send a text message
-    if ($user['allow_sms']) {
-        $cc = $user['phone'] . '@' . $user['mobile_provider'];
-    }
 
 
+    $deadline['crop'] = get_crop_name($deadline['crop_id']);
+    $deadline['state'] = get_state_name($deadline['state_id']);
 
     $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
-    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that " 
-    . $deadline['deadline_name'] 
-    . " date for " . $deadline['crop'] 
-    . " in " . $deadline['state'] 
-    . " is " . $deadline['deadline']
-    . "."
-    . "\n\nBe sure to contact your crop insurance agent at least a month in advance."
-    . ".\n\nThanks,\n\nUConn Extension";
-    
+    $message = "Hello " . $user['firstname'] . ",\n\nThis is a reminder that "
+        . $deadline['deadline_name']
+        . " date for " . $deadline['crop']
+        . " in " . $deadline['state']
+        . " is " . $deadline['deadline']
+        . "."
+        . "\n\nBe sure to contact your crop insurance agent at least a month in advance."
+        . "\n\nThanks,\n\nUConn Extension";
+
     $headers = "From: dx@uconn.edu";
     $email = new \SendGrid\Mail\Mail();
 
     $email->setFrom("dxlab@uconn.edu");
     $email->setSubject($subject);
     $email->addTo($to);
-    $email->addCC($cc);
     $email->addContent("text/plain", $message);
     $apiKey = trim($sg_api_key);
 
-  
-
-
-
-   $sendgrid = new \SendGrid($apiKey);
+    $sendgrid = new \SendGrid($apiKey);
 
 
     try {
@@ -556,12 +549,17 @@ function send_reminder_email($user, $deadline)
 
 
     // echo out the email for testing
-    echo "Sending email to: " . $to . "\n";
+    echo "Sending email to: " . $to . "| \n";
 
-  
+    // if the user has text updates enabled, send a text message
+    if ($user['allow_sms']) {
+        send_reminder_sms($user, $deadline);
+    }
+
 
     if ($success) {
-        echo $response->statusCode() . "\n";
+        echo "Status code: ";
+        echo $response->statusCode() . "|\n";
         echo "Email sent successfully";
         $db->exec('CREATE TABLE IF NOT EXISTS reminders_sent (
                 id INTEGER PRIMARY KEY,
@@ -582,4 +580,41 @@ function send_reminder_email($user, $deadline)
     }
 }
 
+function send_reminder_sms($user, $deadline)
+{
 
+    global $db;
+    include '../sg_config.php';
+    $to = $user['phone'] . '@' . $user['mobile_provider'];
+
+
+
+
+    $deadline['crop'] = get_crop_name($deadline['crop_id']);
+    $deadline['state'] = get_state_name($deadline['state_id']);
+
+    $subject = "Reminder: " . $deadline['deadline_name'] . " for " . $deadline['crop'] . " in " . $deadline['state'] . " is " . $deadline['deadline'];
+
+    $msg = "Talk to your insurance agent well in advance.";
+
+    $email = new \SendGrid\Mail\Mail();
+
+    $email->setFrom("dxlab@uconn.edu");
+    $email->setSubject($subject);
+    $email->addTo($to);
+
+    $email->addContent("text/plain", $msg);
+    $apiKey = trim($sg_api_key);
+
+    $sendgrid = new \SendGrid($apiKey);
+
+    try {
+        $response = $sendgrid->send($email);
+
+
+        $success = true;
+    } catch (Exception $e) {
+        echo 'Caught exception: ' . $e->getMessage() . "\n";
+        $success = false;
+    }
+}
