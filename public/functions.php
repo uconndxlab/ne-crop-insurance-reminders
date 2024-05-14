@@ -287,11 +287,12 @@ function get_all_users()
 {
     global $db;
     // $results = $db->query('SELECT * FROM users');
-    $sql = 'SELECT users.*, GROUP_CONCAT(crops.crop, char(10)) as crops 
-            FROM users 
-            LEFT JOIN user_crops ON users.id = user_crops.user_id 
-            LEFT JOIN crops ON user_crops.crop_id = crops.id 
-            GROUP BY users.id';
+    $sql = 'SELECT users.*, IFNULL(GROUP_CONCAT(crops.crop, char(10)), "") as crops 
+    FROM users 
+    LEFT JOIN user_crops ON users.id = user_crops.user_id 
+    LEFT JOIN crops ON user_crops.crop_id = crops.id 
+    GROUP BY users.id';
+
     $results = $db->query($sql);
 
     if ($results === false) {

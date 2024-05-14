@@ -242,6 +242,9 @@
                                 $users = get_all_users();
                                 foreach ($users as $user) {
                                     $crops = isset($user['crops']) ? explode("\n", $user['crops']) : [];
+
+                                    // if the user has no crops, display an empty row
+
                                     foreach ($crops as $index => $crop) {
                                         echo '<tr>';
                                         if ($index == 0) {
@@ -250,7 +253,14 @@
                                             echo '<td rowspan="' . count($crops) . '">' . htmlspecialchars($user['lastname']) . '</td>';
                                             echo '<td rowspan="' . count($crops) . '">' . htmlspecialchars($user['email']) . '</td>';
                                         }
-                                        echo '<td>' . htmlspecialchars($crop) . '</td>';
+                                        echo '<td>'; 
+
+                                        if ($crop) {
+                                            echo htmlspecialchars($crop);
+                                        } else {
+                                            echo '<div class="text-muted">No crops selected</div>';
+                                        }
+                                        echo '</td>';
                                         if ($index == 0) {
                                             // Only display the delete button in the first row
                                             echo '<td rowspan="' . count($crops) . '"><a href="/users/delete/' . $user['id'] . '" class="btn btn-danger">Delete</a></td>';
