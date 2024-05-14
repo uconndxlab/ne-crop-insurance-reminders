@@ -262,8 +262,11 @@
                                         }
                                         echo '</td>';
                                         if ($index == 0) {
-                                            // Only display the delete button in the first row
-                                            echo '<td rowspan="' . count($crops) . '"><a href="/users/delete/' . $user['id'] . '" class="btn btn-danger">Delete</a></td>';
+                                            // Only display the delete button in the first row, as a form
+                                            echo '<td><form action="/post/user/delete" method="post">';
+                                            echo '<input type="hidden" name="user_id" value="' . $user['id'] . '">';
+                                            echo '<button type="submit" class="btn btn-danger">Delete</button>';
+                                            echo '</form></td>';
                                         }
                                         echo '</tr>';
                                     }

@@ -491,6 +491,17 @@ function get_logged_in_user()
     return $row;
 }
 
+/** delete a user */
+function delete_user($user_id)
+{
+    global $db;
+    $sql = "DELETE FROM users WHERE id = $user_id";
+    $db->exec($sql);
+    $_SESSION['success'] = 'User deleted successfully';
+    header('Location: /');
+    exit;
+}
+
 
 /** This section contains all the notification stuff...email reminders, etc */
 

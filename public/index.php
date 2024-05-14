@@ -86,6 +86,12 @@ switch($_SERVER['REQUEST_URI']) {
         $deadline_id = $_POST['deadline_id'];
         delete_deadline($deadline_id);
         break;
+
+    case '/post/user/delete':
+        check_session();
+        $user_id = $_POST['user_id'];
+        delete_user($user_id);
+        break;
     default:
         // set http response code to 404
         http_response_code(404);
