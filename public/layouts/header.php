@@ -14,6 +14,10 @@
 
 <body>
 <header>
+  <div class="d-flex justify-content-end container">
+    <div id="google_translate_element"></div>
+  </div>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <a class="navbar-brand" href="#">USDA RMA and FSA Program Deadlines</a>
@@ -54,6 +58,7 @@
             <a href="/login" class="btn btn-primary me-2">Login</a>
             <a href="/register" class="btn btn-secondary">Register</a>
         <?php endif; ?>
+
     </div>
   </div>
 </nav>
