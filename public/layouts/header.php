@@ -113,20 +113,13 @@
           <?php endif; ?>
           nav-link" href="/profile">My Grower Profile</a>
         </li>
+
+        <li class="nav-item"> <a href="/logout" class="btn btn-danger">Logout</a> </li>
+
       </ul>
       <?php endif; ?>
     </div>
-    <!-- login/logout -->
-    <div class="d-flex align-items-center">
-        <?php if (isset($_SESSION['user_id'])) : ?>
-            <span class="me-3">Welcome, <?php echo $_SESSION['firstname']; ?></span>
-            <a href="/logout" class="btn btn-danger">Logout</a>
-        <?php else : ?>
-            <a href="/login" class="btn btn-primary me-2">Login</a>
-            <a href="/register" class="btn btn-secondary">Register</a>
-        <?php endif; ?>
 
-    </div>
   </div>
 </nav>
 </div>
