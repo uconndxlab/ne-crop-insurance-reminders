@@ -7,7 +7,7 @@ require_once 'functions.php';
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-body">
                         <header class="page-header">
                             <h2>Register</h2>
@@ -33,7 +33,7 @@ require_once 'functions.php';
                                 <label for="password_confirm">Confirm Password</label>
                                 <input type="password" class="form-control" name="password_confirm" id="password_confirm">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block" style="width:100%">Register</button>
                         </form>
                     </div>
                 </div>
