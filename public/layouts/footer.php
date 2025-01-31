@@ -17,7 +17,7 @@
                     href="http://uconn.edu/disclaimers-privacy-copyright/">Disclaimers, Privacy &amp; Copyright</a>
                 <a class="text-light p-4 link-underline-opacity-0 link-underline-opacity-100-hover"
                     href="https://accessibility.uconn.edu/">Accessibility</a>
-                <p class="mb-0 p-4"> &copy; <?php echo date('Y'); ?> New England Crop Insurance </p>
+               
             </div>
         </div>
     </footer>
