@@ -21,6 +21,13 @@ require_once 'functions.php';
                             <button type="submit" class="btn btn-primary" style="width:100%" >Login</button>
                         </form>
                     </div>
+
+                    <!-- contact info mary.concklin@uconn.edu -->
+
+                    <div class="card-footer">
+                        <p class="mb-0">Need information or assistance? Contact Mary Concklin at <a href="mailto:mary.concklin@uconn.edu"> mary.concklin@uconn.edu</a></p>
+                    </div>
+
                 </div>
             </div>
             <div class="col-lg-6 instructions order-lg-2">
@@ -30,8 +37,8 @@ require_once 'functions.php';
                     <li>Complete your profile by entering an email address and phone number.</li>
                     <li>Once your account has been created, you can use the "Add a Product" tool to sign up for reminders.</li>
                     <ol type="a">
-                        <li>First, select your state (Connecticut dates are available as of 2025)</li>
-                        <li>Then select your "crop" by its policy name.</li>
+                        <li>Select your state.</li>
+                        <li>Select your "crop" by its policy name.</li>
                         <li>That's it! As long as your email address and/or mobile phone number are set correctly, you should receive deadline reminders in advance of your policy's closing dates.</li>
                     <ol>
                 </ol>
