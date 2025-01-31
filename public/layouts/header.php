@@ -94,8 +94,9 @@
     </button>
     <?php endif; ?>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
       <?php if (isset($_SESSION['user_id'])) : ?>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if ($_SESSION['user_type'] == 'admin') : ?>
         <li class="nav-item">
           <a class="nav-link
@@ -116,8 +117,14 @@
 
         <li class="nav-item"> <a href="/logout" class="btn btn-danger">Logout</a> </li>
 
-      </ul>
+
       <?php endif; ?>
+      <?php if (!isset($_SESSION['user_id'])) : ?>
+        <li class="nav-item">
+            <a href="/register" class="btn btn-primary">Register</a>
+        </li>
+        <?php endif; ?>
+        </ul>
     </div>
 
   </div>
