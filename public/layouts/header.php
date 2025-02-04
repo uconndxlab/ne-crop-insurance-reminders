@@ -77,10 +77,10 @@
 <div class="container d-flex align-items-center justify-content-between"  style="padding-top:30px;padding-bottom:30px;">
   <div>
     <p class="header-level-two">
-    <a href="https://cahnr.uconn.edu/" class="link-offset-2">College of Agriculture, Health and Natural Resources</a>
+    <a href="https://cahnr.uconn.edu/extension" class="link-offset-2">College of Agriculture, Health and Natural Resources</a>
     </p>
     <h1 class="header-level-one">
-    <a href="/" class="link-offset-1">USDA RMA and FSA Program Deadlines
+    <a href="/" class="link-offset-1">UConn Extension - USDA RMA and FSA Crop Reporting Deadlines
     </a>
     </h1>
    </div>
