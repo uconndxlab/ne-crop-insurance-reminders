@@ -33,6 +33,16 @@ require_once 'functions.php';
                     </div>
 
                 </div>
+
+                <!-- logo img/usda-rma-mark.jpg -->
+                <div class="card">
+                    <img style="max-width:80%;" src="/img/usda-rma-mark.jpg" class="card-img-top" alt="USDA RMA Logo">
+                    <div class="card-body">
+                        <p class="card-text">This project is sponsored by USDA RMA Award #RMA23CPT0013448</p>
+                    </div>
+                </div>
+
+
             </div>
             <div class="col-lg-6 instructions order-lg-2">
             <div class="card-header mb-2">
