@@ -10,7 +10,12 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($_SERVER['REQUEST_URI']) {
     case '/':
         check_session();
-        do_layout('pages/home');
+
+        if ($_SESSION['user_type'] == 'admin') : 
+            do_layout('pages/home');
+        else :
+            do_layout('pages/profile');
+        endif;
         break;
     case '/profile':
         check_session();

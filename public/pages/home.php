@@ -1,4 +1,5 @@
 <div class="page page-home container">
+    
     <header class="page-header">
         <h2>Management Dashboard</h2>
     </header>
