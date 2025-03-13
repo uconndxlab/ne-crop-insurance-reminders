@@ -36,14 +36,15 @@ $crops = get_all_crops();
                     <label for="mobile_provider">Phone Provider</label>
                     <select class="form-select" id="mobile_provider" name="mobile_provider">
                         <option value="mms.att.net"<?php if ($_SESSION['mobile_provider'] == 'mms.att.net') : ?> selected<?php endif; ?>>AT&T</option>
+                        <option value="sms.mycricket.com"<?php if ($_SESSION['mobile_provider'] == 'sms.mycricket.com') : ?> selected<?php endif; ?>>Cricket</option>
+                        <option value="mms.att.net"<?php if ($_SESSION['mobile_provider'] == 'mms.att.net') : ?> selected<?php endif; ?>>Consumer Cellular</option>
+                        <option value="msg.fi.google.com"<?php if ($_SESSION['mobile_provider'] == 'msg.fi.google.com') : ?> selected<?php endif; ?>>Google Fi</option>
+                        <option value="messaging.sprintpcs.com"<?php if ($_SESSION['mobile_provider'] == 'messaging.sprintpcs.com') : ?> selected<?php endif; ?>>Sprint</option>
                         <option value="tmomail.net"<?php if ($_SESSION['mobile_provider'] == 'tmomail.net') : ?> selected<?php endif; ?>>T-Mobile</option>
                         <option value="vtext.com"<?php if ($_SESSION['mobile_provider'] == 'vtext.com') : ?> selected<?php endif; ?>>Verizon</option>
-                        <option value="messaging.sprintpcs.com"<?php if ($_SESSION['mobile_provider'] == 'messaging.sprintpcs.com') : ?> selected<?php endif; ?>>Sprint</option>
-                        <option value="sms.mycricket.com"<?php if ($_SESSION['mobile_provider'] == 'sms.mycricket.com') : ?> selected<?php endif; ?>>Cricket</option>
                         <option value="vmobl.com"<?php if ($_SESSION['mobile_provider'] == 'vmobl.com') : ?> selected<?php endif; ?>>Virgin Mobile</option>
-                        <option value="msg.fi.google.com"<?php if ($_SESSION['mobile_provider'] == 'msg.fi.google.com') : ?> selected<?php endif; ?>>Google Fi</option>
                     </select>
-                    </select>
+               
                 </div>
 
                 <!-- allow text updates -->
